@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Repository
+//@Repository
 public class InMemoryEventRepository implements EventRepository {
 
     private static List<Event> events = new LinkedList<>();

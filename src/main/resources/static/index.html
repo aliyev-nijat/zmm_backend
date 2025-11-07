@@ -24,11 +24,11 @@
 <body>
     <form>
         <label for="title">Başlıq (title)</label>
-        <input type="text" name="title">
+        <input type="text" name="title" id="title">
         <label for="about">Haqqında</label>
-        <textarea name="about"></textarea>
+        <textarea name="about" id="about"></textarea>
         <label for="dateTime">Tarix</label>
-        <input type="datetime-local" name="dateTime">
+        <input type="datetime-local" name="dateTime" id="dateTime">
         <button type="submit">Əlavə et</button>
     </form>
     <script>
@@ -37,6 +37,7 @@
             e.preventDefault();
             let formData = new FormData(e.target);
             const jsonData = Object.fromEntries(formData.entries());
+            console.log(JSON.stringify(jsonData))
             fetch('/api/events', {
                 method: 'POST',
                 headers: {
