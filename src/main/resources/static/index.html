@@ -1,13 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create event</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        form {
+            margin: 50px;
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+        }
+    </style>
 </head>
+
 <body>
     <form>
-        
+        <label for="title">Başlıq (title)</label>
+        <input type="text" name="title">
+        <label for="about">Haqqında</label>
+        <textarea name="about"></textarea>
+        <label for="dateTime">Tarix</label>
+        <input type="datetime-local" name="dateTime">
+        <button type="submit">Əlavə et</button>
     </form>
+    <script>
+        let form = document.querySelector("form");
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+            const jsonData = Object.fromEntries(formData.entries());
+            fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+        })
+    </script>
 </body>
+
 </html>
