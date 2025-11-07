@@ -13,7 +13,7 @@ public class EventService {
     private EventRepository repository;
 
     public Event create(Event event) {
-        if (event.getId() == null) return null;
+        if (event.getId() != null) return null;
 
         return repository.create(event);
     }
