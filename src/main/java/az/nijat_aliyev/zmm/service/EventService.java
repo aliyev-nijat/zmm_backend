@@ -1,29 +1,32 @@
 package az.nijat_aliyev.zmm.service;
 
-import az.nijat_aliyev.zmm.exception.DbException;
-import az.nijat_aliyev.zmm.model.Event;
+import az.nijat_aliyev.zmm.mapper.EventMapper;
+import az.nijat_aliyev.zmm.model.dto.EventDto;
+import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     @Autowired
-    private EventRepository repository;
+    private final EventMapper mapper;
 
-    public Event create(Event event) {
+    @Autowired
+    private final EventRepository repository;
+
+    public EventDto create(EventDto event) {
         if (event.getId() != null) return null;
 
-        try {
-            return repository.create(event);
-        } catch (DbException e) {
-            throw new RuntimeException(e);
-        }
+        return mapper.map(repository.create(mapper.map(event)));
     }
 
-    public List<Event> findAll() {
+    public List<EventEntity> findAll() {
         return repository.findAll();
     }
 }

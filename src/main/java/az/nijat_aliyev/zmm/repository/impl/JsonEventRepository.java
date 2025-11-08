@@ -1,12 +1,10 @@
 package az.nijat_aliyev.zmm.repository.impl;
 
-import az.nijat_aliyev.zmm.exception.DbException;
-import az.nijat_aliyev.zmm.model.Event;
+import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.model.db.EventDb;
 import az.nijat_aliyev.zmm.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.NonNull;
 import org.springframework.stereotype.Repository;
@@ -27,11 +25,11 @@ public class JsonEventRepository implements EventRepository {
     }
 
     @Override
-    public synchronized Event create(@NonNull Event event) throws DbException {
+    public synchronized EventEntity create(@NonNull EventEntity event) {
         Long id = generateId();
         event.setId(id);
         EventDb data = readData();
-        List<Event> list = new LinkedList<>(data.getEvents());
+        List<EventEntity> list = new LinkedList<>(data.getEvents());
         list.add(event);
         data.setEvents(list);
         writeData(data);
@@ -40,7 +38,7 @@ public class JsonEventRepository implements EventRepository {
     }
 
     @Override
-    public Event getById(@NonNull Long id) {
+    public EventEntity getById(@NonNull Long id) {
         return readData()
                 .getEvents()
                 .stream()
@@ -50,18 +48,38 @@ public class JsonEventRepository implements EventRepository {
     }
 
     @Override
-    public List<Event> findAll() {
+    public List<EventEntity> findAll() {
         return readData().getEvents();
     }
 
     @Override
-    public synchronized Event update(Event event) {
-        return null;
+    public synchronized EventEntity update(@NonNull EventEntity event) {
+        EventDb db = readData();
+        Long id = event.getId();
+        db.setEvents(
+                db.getEvents()
+                        .stream()
+                        .map(e ->
+                                id.equals(e.getId()) ?
+                                        event :
+                                        e
+                        )
+                        .toList()
+        );
+
+        return getById(id);
     }
 
     @Override
     public synchronized void delete(Long id) {
-
+        EventDb db = readData();
+        db.setEvents(
+                db.getEvents()
+                        .stream()
+                        .filter(event -> !event.getId().equals(id))
+                        .toList()
+        );
+        writeData(db);
     }
 
     private synchronized Long generateId() {
@@ -80,7 +98,7 @@ public class JsonEventRepository implements EventRepository {
 
                 return mapper.readValue(new File(dbFilePath), EventDb.class);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Couldn't read .json file.");
             }
         }
     }
@@ -92,7 +110,7 @@ public class JsonEventRepository implements EventRepository {
             try {
                 writer.writeValue(new File(dbFilePath), data);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Couldn't write .json file.");
             }
         }
     }

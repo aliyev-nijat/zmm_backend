@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tədbirlər</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <a href="/adminpanel/index.html">Admin panel</a>
+    <div class="success display-none">
+        <h3>Tədbir əlavə edildi!</h3>
+        <p id="success-id">id: 1</p>
+        <p id="success-title">başlıq:</p>
+        <p id="success-about">haqqında:</p>
+        <p id="success-time">tarix:</p>
+        <button id="contiune-button">Davam et</button>
+    </div>
+    <form>
+        <label for="title">Başlıq (title)</label>
+        <input type="text" name="title" id="title">
+        <label for="about">Haqqında</label>
+        <textarea name="about" id="about"></textarea>
+        <label for="dateTime">Tarix</label>
+        <input type="datetime-local" name="dateTime" id="dateTime">
+        <button type="submit">Əlavə et</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Başlıq</th>
+                <th>Haqqında</th>
+                <th>Tarix</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        let form = document.querySelector("form");
+        let success = document.querySelector(".success");
+        let successId = document.querySelector("#success-id");
+        let successTitle = document.querySelector("#success-title");
+        let successAbout = document.querySelector("#success-about");
+        let successTime = document.querySelector("#success-time");
+        let contiuneButton = document.querySelector("#contiune-button")
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+            const jsonData = Object.fromEntries(formData.entries());
+            jsonData.title = jsonData.title == "" ? null : jsonData.title;
+            jsonData.about = jsonData.about == "" ? null : jsonData.about;
+            jsonData.dateTime = jsonData.dateTime == "" ? null : jsonData.dateTime;
+            fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(r => {
+                    console.log(r.status);
+                    console.log(r.status);
+                    console.log(r.status != 200)
+                    if (r.status != "200") {
+                        throw Error();
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    setDataForSucces(data);
+                    form.classList.add("display-none");
+                    success.classList.remove("display-none");
+                    loadTable();
+                    form.reset();
+                })
+                .catch(e => alert("Tədbir əlavə edilmədi!"))
+        });
+
+        contiuneButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            success.classList.add("display-none");
+            form.classList.remove("display-none");
+            clearSuccess();
+        });
+
+        function setDataForSucces(event) {
+            successId.innerHTML = `id: ${event.id}`;
+            successTitle.innerHTML = `Başlıq: ${event.title || "<span style=\"color: red;\">Daxil edilməyib</span>"}`;
+            successAbout.innerHTML = `Haqqında: ${event.about || "<span style=\"color: red;\">Daxil edilməyib</span>"}`;
+            successTime.innerHTML = `Tarix: ${event.dateTime || "<span style=\"color: red;\">Daxil edilməyib</span>"}`;
+        }
+
+        function clearSuccess() {
+            successId.innerText = `id:`;
+            successTitle.innerText = `Başlıq:`;
+            successAbout.innerText = `Haqqında:`;
+            successTime.innerText = `Tarix:}`;
+        }
+
+        function loadTable() {
+            let tbody = document.querySelector("tbody");
+            fetch("/api/events")
+                .then(r => r.json())
+                .then(data => tbody.innerHTML = data
+                    .map(event => `<tr>
+                    <td>${event.id}</td>
+                    <td>${event.title || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
+                    <td>${event.about || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
+                    <td>${event.dateTime || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
+                    <td><button>Sil</button></td>
+                    </tr>`)
+                    .join("")
+                )
+        }
+
+        loadTable();
+    </script>
+</body>
+
+</html>

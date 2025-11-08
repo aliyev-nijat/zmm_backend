@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+form {
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+.success {
+    width: 400px;
+    margin: 50px;
+    border: 1px solid green;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgb(186, 226, 186);
+    color: rgb(47, 47, 47);
+}
+
+.display-none {
+    display: none !important;
+}
+
+button {
+    padding: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table {
+    margin: 50px;
+}
+
+table,
+td,
+th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 8px;
+}

@@ -1,10 +1,10 @@
 package az.nijat_aliyev.zmm.repository.impl;
 
-import az.nijat_aliyev.zmm.model.Event;
+import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.repository.EventRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
 //@Repository
 public class InMemoryEventRepository implements EventRepository {
 
-    private static List<Event> events = new LinkedList<>();
+    private static List<EventEntity> events = new LinkedList<>();
     private static Long nextId = 1L;
 
     @Override
-    public Event create(Event event) {
+    public EventEntity create(EventEntity event) {
         event.setId(generateId());
         events.add(event);
 
@@ -24,7 +24,7 @@ public class InMemoryEventRepository implements EventRepository {
     }
 
     @Override
-    public Event getById(@NonNull Long id) {
+    public EventEntity getById(@NonNull Long id) {
         return events
                 .stream()
                 .filter(event -> id.equals(event.getId()))
@@ -33,12 +33,12 @@ public class InMemoryEventRepository implements EventRepository {
     }
 
     @Override
-    public List<Event> findAll() {
+    public List<EventEntity> findAll() {
         return List.copyOf(events);
     }
 
     @Override
-    public Event update(@NonNull Event event) {
+    public EventEntity update(@NonNull EventEntity event) {
         if (event.getId() == null) return null;
 
         return events
@@ -58,7 +58,7 @@ public class InMemoryEventRepository implements EventRepository {
         events.removeIf(e -> e.getId().equals(id));
     }
 
-    private void map(Event source, Event target) {
+    private void map(EventEntity source, EventEntity target) {
         target.setId(source.getId());
         target.setTitle(source.getTitle());
         target.setAbout(source.getAbout());
