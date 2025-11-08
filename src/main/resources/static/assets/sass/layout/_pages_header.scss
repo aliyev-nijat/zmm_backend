@@ -1,0 +1,21 @@
+#pages-header {
+  width: 100%;
+  background-color: #5b525b;
+  padding: 70px 0;
+  .container {
+    .header-container {
+      font-weight: 400;
+      font-style: Regular;
+      color: #fafbf9;
+      .header-headText {
+        font-family: "Playfair Display", serif;
+        font-size: 48px;
+        margin-bottom: 10px;
+      }
+      .header-contentTex {
+        font-family: "Poppins", sans-serif;
+        font-size: 24px;
+      }
+    }
+  }
+}
