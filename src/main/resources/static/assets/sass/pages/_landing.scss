@@ -443,6 +443,7 @@
         grid-template-columns: auto;
         justify-items: center;
         .abut-text {
+          order: 2;
           .avout-header-textBox {
             margin-bottom: 32px;
             p {
@@ -455,6 +456,9 @@
               line-height: 1.3;
             }
           }
+        }
+        .about-imgBox {
+          order: 1;
         }
       }
     }
