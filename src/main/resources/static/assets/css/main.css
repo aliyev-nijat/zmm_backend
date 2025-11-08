@@ -512,6 +512,9 @@ nav .navMenuMobil ul p {
     grid-template-columns: auto;
     justify-items: center;
   }
+  #about-section .container .about-container .abut-text {
+    order: 2;
+  }
   #about-section .container .about-container .abut-text .avout-header-textBox {
     margin-bottom: 32px;
   }
@@ -521,6 +524,9 @@ nav .navMenuMobil ul p {
   #about-section .container .about-container .abut-text .about-contentBox p {
     font-size: 16px;
     line-height: 1.3;
+  }
+  #about-section .container .about-container .about-imgBox {
+    order: 1;
   }
   #gallery-section .container .gallery-container .gallery-imageBox {
     display: grid;
@@ -543,6 +549,143 @@ nav .navMenuMobil ul p {
   margin: 100px 0 !important;
 }
 
+#events-section {
+  margin: 60px 0;
+}
+#events-section .container .events-container {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+}
+#events-section .container .events-container .event-card .eventImgBox img {
+  border-radius: 14px;
+  width: 100%;
+  height: 310px;
+  object-fit: cover;
+  display: block;
+}
+#events-section .container .events-container .event-card .eventContetBox {
+  font-weight: 400;
+  font-style: Regular;
+  color: #0f0e12;
+}
+#events-section .container .events-container .event-card .eventContetBox .eventCardName {
+  font-size: 18px;
+  margin: 10px 0;
+  font-family: "Playfair Display", serif;
+}
+#events-section .container .events-container .event-card .eventContetBox .eventCardContent {
+  font-size: 14px;
+  margin-bottom: 11px;
+  line-height: 1.3;
+  color: #2e2c2e;
+  font-family: "Poppins", sans-serif;
+}
+#events-section .container .events-container .event-card .eventContetBox .eventCardFooter {
+  display: flex;
+  justify-content: space-between;
+}
+#events-section .container .events-container .event-card .eventContetBox .eventCardFooter button {
+  padding: 10px 20px;
+  color: #5b525b;
+  border-radius: 8px;
+  border: 1px solid #5b525b;
+  background-color: #fff;
+  font-size: 16px;
+}
+#events-section .container .events-container .event-card .eventContetBox .eventCardFooter span {
+  color: #0f0e12;
+  font-size: 10px;
+  text-align: end;
+}
+
+#courses-section {
+  margin: 60px 0;
+}
+#courses-section .container .courses-container {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-between;
+}
+#courses-section .container .courses-container .course-card .courseImgBox img {
+  border-radius: 14px;
+  width: 100%;
+  height: 345px;
+  object-fit: cover;
+  display: block;
+}
+#courses-section .container .courses-container .course-card .courseContetBox {
+  margin-top: 10px;
+  font-weight: 400;
+  font-style: Regular;
+  color: #0f0e12;
+}
+#courses-section .container .courses-container .course-card .courseContetBox .courseCardName {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-family: "Playfair Display", serif;
+}
+#courses-section .container .courses-container .course-card .courseContetBox .courseCardFooter button {
+  padding: 10px 20px;
+  color: #5b525b;
+  border-radius: 8px;
+  border: 1px solid #5b525b;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+@media screen and (max-width: 1024px) {
+  #events-section .container .events-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardContent {
+    font-size: 14px;
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardFooter button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardFooter span {
+    font-size: 10px;
+  }
+  #courses-section .container .courses-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #courses-section .container .courses-container .course-card .courseContetBox .courseCardFooter button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 526px) {
+  #events-section .container .events-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardName {
+    font-size: 16px;
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardContent {
+    font-size: 12px;
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardFooter button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  #events-section .container .events-container .event-card .eventContetBox .eventCardFooter span {
+    font-size: 8px;
+  }
+  #courses-section .container .courses-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  #courses-section .container .courses-container .course-card .courseContetBox .courseCardName {
+    font-size: 16px;
+  }
+  #courses-section .container .courses-container .course-card .courseContetBox .courseCardFooter button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
 footer {
   margin: 20px auto 0;
 }
@@ -551,7 +694,7 @@ footer .container .footer-container {
   font-style: Regular;
   display: flex;
   justify-content: space-between;
-  padding: 40px 0;
+  padding: 40px 10px;
 }
 footer .container .footer-container ul {
   display: flex;
