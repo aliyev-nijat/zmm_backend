@@ -1,7 +1,6 @@
 package az.nijat_aliyev.zmm.repository;
 
-import az.nijat_aliyev.zmm.exception.DbException;
-import az.nijat_aliyev.zmm.model.Event;
+import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,13 +8,13 @@ import java.util.List;
 @Repository
 public interface EventRepository {
 
-    Event create(Event event) throws DbException;
+    EventEntity create(EventEntity event);
 
-    List<Event> findAll();
+    List<EventEntity> findAll();
 
-    Event getById(Long id);
+    EventEntity getById(Long id);
 
-    Event update(Event event);
+    EventEntity update(EventEntity event);
 
     void delete(Long id);
 }
