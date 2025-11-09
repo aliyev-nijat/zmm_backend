@@ -93,6 +93,31 @@ class Creation {
     }
 }
 
+class Util {
+    static escapeForAttribute(str) {
+        return str.split("")
+            .map(char => {
+                switch (char) {
+                    case '"':
+                        return "&quot;";
+                    case "&":
+                        return "&amp;";
+                    case '<':
+                        return "&lt;";
+                    case '>':
+                        return "&gt;";
+                    default:
+                        return char;
+                }
+            })
+            //.map(char => char == '"' ? "&quot;" : char)
+            //.map(char => char == "&" ? "&amp;" : char)
+            //.map(char => char == "<" ? "&lt;" : char)
+            //.map(char => char == ">" ? "&gt;" : char)
+            .join("");
+    }
+}
+
 class Updating {
     static getUpdateForm(id) {
         let form = document.createElement('form');
@@ -106,9 +131,9 @@ class Updating {
             <label for="id">ID</label>
             <input type="number" name="id" id="id" disabled value="${event.id}">
             <label for="title">Başlıq (title)</label>
-            <input type="text" name="title" id="title" value="${event.title}">
+            <input type="text" name="title" id="title" value="${Util.escapeForAttribute(event.title)}">
             <label for="about">Haqqında</label>
-            <textarea name="about" id="about">${event.about}</textarea>
+            <textarea name="about" id="about">${Util.escapeForAttribute(event.about)}</textarea>
             <label for="dateTime">Tarix</label>
             <input type="datetime-local" name="dateTime" id="dateTime" value="${event.dateTime}">
             <button type="submit">Redaktə et</button>
@@ -148,8 +173,8 @@ class Updating {
                     .map(key => `${keyMap[key] || key}: ${data[key]}`)
                     .join("\n")
                     }`);
-                    pageMode = "initial";
-                    Page.loadPage();
+                pageMode = "initial";
+                Page.loadPage();
             })
             .catch(() => alert("Xəta: Redaktə mümkün olmadı"));
     }
