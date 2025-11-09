@@ -5,6 +5,8 @@ import az.nijat_aliyev.zmm.util.LocalDateTimeSerializer;
 import az.nijat_aliyev.zmm.validation.OnCreate;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;
@@ -16,16 +18,21 @@ import java.time.LocalDateTime;
 @Setter
 public class EventDto {
 
-    @Null(groups = OnCreate.class)
+    @Null
     private Long id;
 
-    @NotNull(groups = OnCreate.class)
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String title;
 
-    @NotNull(groups = OnCreate.class)
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String about;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotNull
     private LocalDateTime dateTime;
 }
