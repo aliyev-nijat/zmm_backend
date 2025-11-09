@@ -4,12 +4,10 @@ import az.nijat_aliyev.zmm.exception.EventNotFoundException;
 import az.nijat_aliyev.zmm.model.dto.EventDto;
 import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.service.EventService;
-import az.nijat_aliyev.zmm.validation.OnCreate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +30,15 @@ public class EventController {
 
 
     @GetMapping
-    public ResponseEntity<List<EventEntity>> findAll() {
+    public ResponseEntity<List<EventDto>> findAll() {
         return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EventDto> getById(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping
