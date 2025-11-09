@@ -4,6 +4,7 @@ import az.nijat_aliyev.zmm.mapper.EventMapper;
 import az.nijat_aliyev.zmm.model.dto.EventDto;
 import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.repository.EventRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,20 @@ public class EventService {
     private final EventRepository repository;
 
     public EventDto create(EventDto event) {
-        if (event.getId() != null) return null;
-
-        return mapper.map(repository.create(mapper.map(event)));
+        return mapper
+                .map(
+                        repository
+                                .create(
+                                        mapper.map(event)
+                                )
+                );
     }
 
     public List<EventEntity> findAll() {
         return repository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        repository.delete(id);
     }
 }
