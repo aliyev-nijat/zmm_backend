@@ -57,6 +57,7 @@ public class JsonEventRepository implements EventRepository {
         EventDb db = readData();
         Long id = event.getId();
         db.setEvents(
+
                 db.getEvents()
                         .stream()
                         .map(e ->
@@ -66,6 +67,7 @@ public class JsonEventRepository implements EventRepository {
                         )
                         .toList()
         );
+        writeData(db);
 
         return getById(id);
     }

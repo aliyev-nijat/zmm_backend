@@ -63,9 +63,6 @@
                 body: JSON.stringify(jsonData)
             })
                 .then(r => {
-                    console.log(r.status);
-                    console.log(r.status);
-                    console.log(r.status != 200)
                     if (r.status != "200") {
                         throw Error();
                     }
@@ -112,8 +109,12 @@
                     <td>${event.id}</td>
                     <td>${event.title || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
                     <td>${event.about || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
-                    <td>${event.dateTime || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
+                    <td>${event.dateTime == null ?
+                                "<span style=\"color: red;\">Daxil edilməyib</span>" :
+                                `Tarix: ${event.dateTime.split("T")[0]}, Saat: ${event.dateTime.split("T")[1]}`
+                            }</td>
                     <td><button class="delete-button" data-id="${event.id}">Sil</button></td>
+                    <td><button class="update-button" data-id="${event.id}">Redaktə et</button></td>
                     </tr>`)
                         .join("")
 
@@ -136,7 +137,43 @@
                                         alert("Xəta baş verdi")
                                     }
                                 })
-                                .catch(e => alert("XƏTA!!!"));
+                                .catch(e => alert("XƏTA!!!"))
+                                .finally(() => loadTable());
+                        }))
+
+                    let allUpdateButtons = [...document.querySelectorAll(".update-button")];
+                    allUpdateButtons
+                        .forEach(button => button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const id = e.target.dataset.id;
+                            let event = data.filter(e => e.id == id)[0];
+                            let newEvent = {
+                                title: prompt("Başlıq", event.title),
+                                about: prompt("Haqqqında", event.about),
+                                dateTime: prompt("Tarix", event.dateTime)
+                            };
+                            if (
+                                newEvent.title == null ||
+                                newEvent.about == null ||
+                                newEvent.dateTime == null
+                            ) return;
+                            fetch(`/api/events/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(newEvent)
+                            })
+                                .then(r => {
+                                    if (r.status == 200) {
+                                        alert("Tədbir uğurla dəyişdirildi")
+                                    }
+                                    else {
+                                        alert("Xəta baş verdi")
+                                    }
+                                })
+                                .catch(e => alert("XƏTA!!!"))
+                                .finally(() => loadTable());
                         }))
                 })
         }

@@ -1,5 +1,6 @@
 package az.nijat_aliyev.zmm.service;
 
+import az.nijat_aliyev.zmm.exception.EventNotFoundException;
 import az.nijat_aliyev.zmm.mapper.EventMapper;
 import az.nijat_aliyev.zmm.model.dto.EventDto;
 import az.nijat_aliyev.zmm.model.entity.EventEntity;
@@ -37,5 +38,21 @@ public class EventService {
 
     public void deleteById(Long id) {
         repository.delete(id);
+    }
+
+    public EventDto update(@NonNull Long id, EventDto event)
+            throws EventNotFoundException {
+        if (repository.getById(id) == null) {
+            throw new EventNotFoundException(
+                    String.format("Event not found with given id(%d).", id)
+            );
+        }
+        event.setId(id);
+        return mapper
+                .map(
+                        repository.update(
+                                mapper.map(event)
+                        )
+                );
     }
 }
