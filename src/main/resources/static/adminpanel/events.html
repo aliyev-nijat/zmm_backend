@@ -106,16 +106,39 @@
             let tbody = document.querySelector("tbody");
             fetch("/api/events")
                 .then(r => r.json())
-                .then(data => tbody.innerHTML = data
-                    .map(event => `<tr>
+                .then(data => {
+                    tbody.innerHTML = data
+                        .map(event => `<tr>
                     <td>${event.id}</td>
                     <td>${event.title || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
                     <td>${event.about || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
                     <td>${event.dateTime || "<span style=\"color: red;\">Daxil edilməyib</span>"}</td>
-                    <td><button>Sil</button></td>
+                    <td><button class="delete-button" data-id="${event.id}">Sil</button></td>
                     </tr>`)
-                    .join("")
-                )
+                        .join("")
+
+                    let allDeleteButtons = [...document.querySelectorAll(".delete-button")];
+                    allDeleteButtons
+                        .forEach(button => button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const id = e.target.dataset.id;
+                            fetch(`/api/events/${id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(r => {
+                                    if (r.status == 204) {
+                                        alert("Tədbir uğurla silindi")
+                                    }
+                                    else {
+                                        alert("Xəta baş verdi")
+                                    }
+                                })
+                                .catch(e => alert("XƏTA!!!"));
+                        }))
+                })
         }
 
         loadTable();
