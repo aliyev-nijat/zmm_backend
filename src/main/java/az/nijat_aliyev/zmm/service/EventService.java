@@ -32,8 +32,15 @@ public class EventService {
                 );
     }
 
-    public List<EventEntity> findAll() {
-        return repository.findAll();
+    public List<EventDto> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(entity -> mapper.map(entity))
+                .toList();
+    }
+
+    public EventDto getById(@NonNull Long id) {
+        return mapper.map(repository.getById(id));
     }
 
     public void deleteById(Long id) {
