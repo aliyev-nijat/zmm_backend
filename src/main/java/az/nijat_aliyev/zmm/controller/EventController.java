@@ -2,7 +2,6 @@ package az.nijat_aliyev.zmm.controller;
 
 import az.nijat_aliyev.zmm.exception.EventNotFoundException;
 import az.nijat_aliyev.zmm.model.dto.EventDto;
-import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
