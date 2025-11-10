@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 
 @Service
@@ -68,12 +67,30 @@ public class ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        String oldUrl = event.getImageUrl();
+        if (oldUrl != null) {
+            repository.delete(oldUrl.substring(11));
+        }
         repository.save(newFilename, content);
         String url = "/api/images" + "/" + newFilename;
         event.setImageUrl(url);
         eventRepository.update(event);
 
         return url;
+    }
+
+    public void deleteEventImage(Long id) {
+        EventEntity event = eventRepository.getById(id);
+        String url = event.getImageUrl();
+        if (url != null) {
+            repository.delete(url.substring(11));
+            event.setImageUrl(null);
+            eventRepository.update(event);
+        }
+    }
+
+    private void delete(String url) {
+        repository.delete(url.substring(11));
     }
 
     private String[] splitByDash(String name) {
@@ -96,5 +113,4 @@ public class ImageService {
     public byte[] getImage(String path) {
         return repository.getImage(path);
     }
-
 }
