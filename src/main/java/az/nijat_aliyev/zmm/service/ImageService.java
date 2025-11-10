@@ -93,4 +93,8 @@ public class ImageService {
         ) throw new ImageException("Validation exception");
     }
 
+    public byte[] getImage(String path) {
+        return repository.getImage(path);
+    }
+
 }

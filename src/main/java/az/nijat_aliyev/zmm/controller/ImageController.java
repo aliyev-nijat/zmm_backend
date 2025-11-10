@@ -22,7 +22,10 @@ public class ImageController {
 
     private final ImageService service;
 
-    @PostMapping(value = "/{dir}/{name}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            value = "/{dir}/{name}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<Map<String, Object>> upload(
             @PathVariable String dir,
             @PathVariable String name,
@@ -32,5 +35,25 @@ public class ImageController {
         response.put("url", service.upload(dir, name, file));
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{dir}/{name}")
+    public ResponseEntity<byte[]> getEventImage(
+            @PathVariable String dir,
+            @PathVariable String name
+    ) {
+        String[] split = name.split("\\.");
+        String extension = split[split.length - 1];
+        String mimeType = String.format("image/%s", extension);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+                .body(service.getImage(
+                        String.format("/%s/%s",
+                                dir,
+                                name
+                        )
+                )
+        );
     }
 }

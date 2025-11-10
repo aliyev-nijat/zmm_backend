@@ -2,7 +2,9 @@ package az.nijat_aliyev.zmm.repository;
 
 import az.nijat_aliyev.zmm.exception.ImageException;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,6 +59,21 @@ public class ImageRepository {
                 ).contains(extension)
         ) {
             throw new ImageException("Image extension can't be: " + extension);
+        }
+    }
+
+    public byte[] getImage(String path) {
+        Path pathObj = Paths.get(dbFolder + path);
+        if (Files.notExists(pathObj)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Image does not exist"
+            );
+        }
+        try {
+            return Files.readAllBytes(pathObj);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
