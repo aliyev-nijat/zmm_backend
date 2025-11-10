@@ -2,6 +2,7 @@ package az.nijat_aliyev.zmm.repository;
 
 import az.nijat_aliyev.zmm.exception.ImageException;
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
@@ -72,6 +73,16 @@ public class ImageRepository {
         }
         try {
             return Files.readAllBytes(pathObj);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(@NonNull String filePath) {
+        String fullPath = String.format("%s%s", dbFolder, filePath);
+        Path path = Paths.get(fullPath);
+        try {
+            Files.delete(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

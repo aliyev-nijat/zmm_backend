@@ -1,9 +1,11 @@
 package az.nijat_aliyev.zmm.controller;
 
+import az.nijat_aliyev.zmm.exception.EventNotFoundException;
 import az.nijat_aliyev.zmm.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,11 +51,20 @@ public class ImageController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(service.getImage(
-                        String.format("/%s/%s",
-                                dir,
-                                name
+                                String.format("/%s/%s",
+                                        dir,
+                                        name
+                                )
                         )
-                )
-        );
+                );
+    }
+
+    @DeleteMapping("/events/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    ) {
+        service.deleteEventImage(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

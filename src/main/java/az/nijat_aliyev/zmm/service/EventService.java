@@ -54,12 +54,14 @@ public class EventService {
 
     public EventDto update(@NonNull Long id, EventDto event)
             throws EventNotFoundException {
-        if (repository.getById(id) == null) {
+        EventEntity oldEvent = repository.getById(id);
+        if (oldEvent == null) {
             throw new EventNotFoundException(
                     String.format("Event not found with given id(%d).", id)
             );
         }
         event.setId(id);
+        event.setImageUrl(oldEvent.getImageUrl());
         return mapper
                 .map(
                         repository.update(

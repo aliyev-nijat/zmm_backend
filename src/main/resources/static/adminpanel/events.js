@@ -21,6 +21,22 @@ class Util {
             })
             .join("");
     }
+
+    static connectInputToImg(input, img, defaultUrl) {
+        input.addEventListener('change', () => {
+            const file = input.files && input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+            else {
+                img.src = defaultUrl;
+            }
+        })
+    }
 }
 
 class Api {
@@ -56,6 +72,19 @@ class Api {
         return fetch(`/api/events/${id}`, {
             method: 'DELETE'
         });
+    }
+
+    static uploadImage(id, body) {
+        return fetch(`/api/images/events/${id}`, {
+            method: 'POST',
+            body
+        });
+    }
+
+    static deleteImage(id) {
+        return fetch(`/api/images/events/${id}`, {
+            method: 'DELETE'
+        })
     }
 }
 
@@ -131,8 +160,16 @@ class Updating {
             <textarea name="about" id="about">${Util.escapeForAttribute(event.about)}</textarea>
             <label for="dateTime">Tarix</label>
             <input type="datetime-local" name="dateTime" id="dateTime" value="${event.dateTime}">
+            <label for="update-file">Şəkil</label>
+            <input type="file" name="file" id="update-file" accept="image/">
+                <img src="${event.imageUrl || ""}"> 
             <button type="submit">Redaktə et</button>
             `;
+                Util.connectInputToImg(
+                    form.querySelector("#update-file"),
+                    form.querySelector("img"),
+                    event.imageUrl || ""
+                );
                 form.addEventListener("submit", e => Updating.submitEventListener(e, id));
 
                 return form;
@@ -158,12 +195,24 @@ class Updating {
                 .map(message => alert(message))
                 .length != 0
         ) return;
+        delete requestBody.file;
 
         Api.update(id, requestBody).then(r => {
             if (r.status != 200) throw new Error();
             return r.json();
         })
             .then(data => {
+                const fileInput = e.target.querySelector("#update-file");
+                if (fileInput.files.length != 0) {
+                    const file = fileInput.files[0];
+                    const imageFormData = new FormData();
+                    imageFormData.append('file', file);
+                    Api.uploadImage(id, formData)
+                        .then(r => {
+                            if (r.status != 200) throw Error();
+                        })
+                        .catch(() => alert("Xəta: Şəkil yüklənmədi"))
+                }
                 alert(`Redaktə edildi!\n${Object.keys(data)
                     .map(key => `${keyMap[key] || key}: ${data[key]}`)
                     .join("\n")
@@ -191,7 +240,7 @@ class Page {
         <th>Tarix</th>
         <th></th>
         <th></th>
-        <th>Şəkil</th>
+        <th colspan="2">Şəkil</th>
         </thead>`;
         let tbody = document.createElement('tbody');
         table.appendChild(tbody);
@@ -256,11 +305,36 @@ class Page {
                     })
                     .map(set => {
                         let td = document.createElement('td');
-                        let img = document.createElement('img');
-                        img.setAttribute("width", "200px");
-                        img.setAttribute("src", set.event.imageUrl);
-                        td.appendChild(img);
-                        
+                        if (set.event.imageUrl == null) td.setAttribute("colspan", "2");
+                        if (set.event.imageUrl) {
+                            let img = document.createElement('img');
+                            img.setAttribute("width", "200px");
+                            img.setAttribute("src", set.event.imageUrl);
+                            td.appendChild(img);
+                        }
+                        else {
+                            td.innerHTML = `<span style="color: red;">Şəkil əlavə edilməyib</span>`;
+                        }
+                        set.element.appendChild(td);
+
+                        return set;
+                    })
+                    .map(set => {
+                        if (set.event.imageUrl == null) return set;
+                        let td = document.createElement('td');
+                        let button = document.createElement('button');
+                        td.appendChild(button);
+                        button.innerHTML = "Şəkili sil";
+                        button.addEventListener('click', e => {
+                            e.preventDefault();
+                            Api.deleteImage(set.event.id)
+                                .then(r => {
+                                    if (r.status != 204) throw new Error();
+                                })
+                                .then(() => alert("Şəkil silindi"))
+                                .catch(() => alert("Xəta: Şəkil silinmədi"))
+                                .finally(() => Page.loadPage());
+                        });
                         set.element.appendChild(td);
 
                         return set;
