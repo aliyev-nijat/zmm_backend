@@ -191,6 +191,7 @@ class Page {
         <th>Tarix</th>
         <th></th>
         <th></th>
+        <th>Şəkil</th>
         </thead>`;
         let tbody = document.createElement('tbody');
         table.appendChild(tbody);
@@ -249,6 +250,17 @@ class Page {
                             state.eventId = set.event.id;
                             Page.loadPage();
                         });
+                        set.element.appendChild(td);
+
+                        return set;
+                    })
+                    .map(set => {
+                        let td = document.createElement('td');
+                        let img = document.createElement('img');
+                        img.setAttribute("width", "200px");
+                        img.setAttribute("src", set.event.imageUrl);
+                        td.appendChild(img);
+                        
                         set.element.appendChild(td);
 
                         return set;
