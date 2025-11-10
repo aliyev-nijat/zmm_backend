@@ -40,7 +40,12 @@ public class EventService {
     }
 
     public EventDto getById(@NonNull Long id) {
-        return mapper.map(repository.getById(id));
+        EventEntity event = repository.getById(id);
+        if (event == null) {
+            throw new EventNotFoundException("Event not found with given id");
+        }
+
+        return mapper.map(event);
     }
 
     public void deleteById(Long id) {
