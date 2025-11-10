@@ -1,6 +1,7 @@
 package az.nijat_aliyev.zmm.controller.exception;
 
 import az.nijat_aliyev.zmm.exception.EventNotFoundException;
+import az.nijat_aliyev.zmm.exception.ImageException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,12 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ImageException.class)
+    public ResponseEntity<Map<String, Object>> validation(ImageException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

@@ -34,4 +34,7 @@ public class EventDto {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @NotNull
     private LocalDateTime dateTime;
+
+    @Null
+    private String imageUrl;
 }

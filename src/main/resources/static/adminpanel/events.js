@@ -2,6 +2,26 @@ let pageMode = "initial";
 let state = {};
 let container = document.querySelector("#container");
 
+class Util {
+    static escapeForAttribute(str) {
+        return str.split("")
+            .map(char => {
+                switch (char) {
+                    case '"':
+                        return "&quot;";
+                    case "&":
+                        return "&amp;";
+                    case '<':
+                        return "&lt;";
+                    case '>':
+                        return "&gt;";
+                    default:
+                        return char;
+                }
+            })
+            .join("");
+    }
+}
 
 class Api {
     static create(body) {
@@ -93,31 +113,6 @@ class Creation {
     }
 }
 
-class Util {
-    static escapeForAttribute(str) {
-        return str.split("")
-            .map(char => {
-                switch (char) {
-                    case '"':
-                        return "&quot;";
-                    case "&":
-                        return "&amp;";
-                    case '<':
-                        return "&lt;";
-                    case '>':
-                        return "&gt;";
-                    default:
-                        return char;
-                }
-            })
-            //.map(char => char == '"' ? "&quot;" : char)
-            //.map(char => char == "&" ? "&amp;" : char)
-            //.map(char => char == "<" ? "&lt;" : char)
-            //.map(char => char == ">" ? "&gt;" : char)
-            .join("");
-    }
-}
-
 class Updating {
     static getUpdateForm(id) {
         let form = document.createElement('form');
@@ -189,14 +184,14 @@ class Page {
     static getTable() {
         let table = document.createElement("table");
         table.innerHTML = `<thead>
-                <tr>
-                <th>ID</th>
-                <th>Başlıq</th>
-                <th>Haqqında</th>
-                <th>Tarix</th>
-                <th></th>
-                <th></th>
-                </thead>`;
+        <tr>
+        <th>ID</th>
+        <th>Başlıq</th>
+        <th>Haqqında</th>
+        <th>Tarix</th>
+        <th></th>
+        <th></th>
+        </thead>`;
         let tbody = document.createElement('tbody');
         table.appendChild(tbody);
         return Api.getAll()
@@ -214,12 +209,12 @@ class Page {
                     .map(set => {
                         set.element
                             .innerHTML = `
-                    <td>${set.event.id}</td>
-                    <td>${set.event.title}</td>
-                    <td>${set.event.about}</td>
-                    <td>${`Tarix: ${set.event.dateTime.split("T")[0]}, 
-                        Saat: ${set.event.dateTime.split("T")[1]}`}
-                        </td>`;
+                <td>${set.event.id}</td>
+                <td>${set.event.title}</td>
+                <td>${Util.escapeForAttribute(set.event.about)}</td>
+                <td>${`Tarix: ${set.event.dateTime.split("T")[0]}, 
+                    Saat: ${set.event.dateTime.split("T")[1]}`}
+                    </td>`;
 
                         return set;
                     })
