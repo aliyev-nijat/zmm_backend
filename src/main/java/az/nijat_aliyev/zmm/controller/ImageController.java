@@ -1,7 +1,7 @@
 package az.nijat_aliyev.zmm.controller;
 
-import az.nijat_aliyev.zmm.exception.EventNotFoundException;
 import az.nijat_aliyev.zmm.service.ImageService;
+import az.nijat_aliyev.zmm.service.NewImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,12 @@ import java.util.Map;
 public class ImageController {
 
     private final ImageService service;
+    private final NewImageService newImageService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<byte[]> getById(Long id) {
+        return ResponseEntity.ok(newImageService.getImageById(id));
+    }
 
     @PostMapping(
             value = "/{dir}/{name}",

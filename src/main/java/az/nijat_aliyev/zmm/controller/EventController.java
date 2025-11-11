@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -67,5 +71,22 @@ public class EventController {
             @Valid @RequestBody EventDto event
     ) throws EventNotFoundException {
         return ResponseEntity.ok(service.update(id, event));
+    }
+
+    @PostMapping("/{eventId}/image")
+    public ResponseEntity<Map<String, Object>> uploadImage(
+            @PathVariable Long eventId,
+            @RequestParam MultipartFile image
+    ) {
+        return ResponseEntity.ok(service.uploadImage(eventId, image));
+    }
+
+    @DeleteMapping("/{eventId}/image")
+    public ResponseEntity<Void> deleteImage(
+            @PathVariable Long eventId
+    ) {
+        service.deleteImage(eventId);
+
+        return ResponseEntity.notFound().build();
     }
 }
