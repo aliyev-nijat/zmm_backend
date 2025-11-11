@@ -5,11 +5,12 @@ import az.nijat_aliyev.zmm.mapper.EventMapper;
 import az.nijat_aliyev.zmm.model.dto.EventDto;
 import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.model.entity.ImageEntity;
-import az.nijat_aliyev.zmm.repository.EventRepository;
 import az.nijat_aliyev.zmm.repository.ImageRepository;
+import az.nijat_aliyev.zmm.repository.EventRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,16 +28,17 @@ public class EventService {
     @Autowired
     private final EventMapper mapper;
 
-    @Autowired
     private final EventRepository repository;
     private final ImageRepository imageRepository;
 
     public EventDto create(EventDto event) {
+        EventEntity eventEntity = mapper.map(event);
+        eventEntity.setId(null);
         return mapper
                 .map(
                         repository
-                                .create(
-                                        mapper.map(event)
+                                .save(
+                                        eventEntity
                                 )
                 );
     }
@@ -44,54 +46,66 @@ public class EventService {
     public List<EventDto> findAll() {
         return repository.findAll()
                 .stream()
-                .map(entity -> mapper.map(entity))
+                .map(mapper::map)
                 .toList();
     }
 
     public EventDto getById(@NonNull Long id) {
-        EventEntity event = repository.getById(id);
-        if (event == null) {
-            throw new EventNotFoundException("Event not found with given id");
-        }
+        EventEntity event = repository
+                .findById(id)
+                .orElseThrow(() ->
+                        new EventNotFoundException("Event not found with given id")
+                );
+
 
         return mapper.map(event);
     }
 
-    public void deleteById(Long id) {
-        deleteImage(id);
-        repository.delete(id);
+    public void deleteById(@NonNull Long id) {
+        try {
+            deleteImage(id);
+        } catch (ResponseStatusException e) {
+        }
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     public EventDto update(@NonNull Long id, EventDto event)
             throws EventNotFoundException {
-        EventEntity oldEvent = repository.getById(id);
-        if (oldEvent == null) {
-            throw new EventNotFoundException(
-                    String.format("Event not found with given id(%d).", id)
-            );
-        }
+        EventEntity oldEvent = repository
+                .findById(id)
+                .orElseThrow(() ->
+                        new EventNotFoundException(String.format(
+                                "Event not found with given id(%d).",
+                                id
+                        ))
+                );
         event.setId(id);
         event.setImageUrl(oldEvent.getImageUrl());
         event.setImageId(oldEvent.getImageId());
         return mapper
                 .map(
-                        repository.update(
+                        repository.save(
                                 mapper.map(event)
                         )
                 );
     }
 
     public Map<String, Object> uploadImage(
-            Long eventId,
+            @NonNull Long eventId,
             MultipartFile image
     ) {
         if (image == null || image.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        EventEntity event = repository.getById(eventId);
-        if (event == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        EventEntity event = repository
+                .findById(eventId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                );
         Long oldImageId = event.getImageId();
         if (oldImageId != null) {
             imageRepository.delete(oldImageId);
@@ -115,7 +129,7 @@ public class EventService {
                 "/api/images/%d",
                 newImageId
         ));
-        repository.update(event);
+        repository.save(event);
         Map<String, Object> result = new HashMap<>();
         result.put("imageId", newImageId);
         result.put("imageUrl", String.format("/images/%d", newImageId));
@@ -123,17 +137,18 @@ public class EventService {
         return result;
     }
 
-    public void deleteImage(Long eventId) {
-        EventEntity event = repository.getById(eventId);
-        if (event == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public void deleteImage(@NonNull Long eventId) {
+        EventEntity event = repository
+                .findById(eventId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                );
         Long imageId = event.getImageId();
         if (imageId != null) {
             imageRepository.delete(imageId);
             event.setImageUrl(null);
             event.setImageId(null);
-            repository.update(event);
+            repository.save(event);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
