@@ -6,7 +6,7 @@ import az.nijat_aliyev.zmm.model.dto.EventDto;
 import az.nijat_aliyev.zmm.model.entity.EventEntity;
 import az.nijat_aliyev.zmm.model.entity.ImageEntity;
 import az.nijat_aliyev.zmm.repository.EventRepository;
-import az.nijat_aliyev.zmm.repository.NewImageRepository;
+import az.nijat_aliyev.zmm.repository.ImageRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class EventService {
 
     @Autowired
     private final EventRepository repository;
-    private final NewImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     public EventDto create(EventDto event) {
         return mapper
@@ -71,6 +71,7 @@ public class EventService {
         }
         event.setId(id);
         event.setImageUrl(oldEvent.getImageUrl());
+        event.setImageId(oldEvent.getImageId());
         return mapper
                 .map(
                         repository.update(
@@ -109,6 +110,10 @@ public class EventService {
         ImageEntity newImageEntity = imageRepository.create(imageEntity);
         Long newImageId = newImageEntity.getId();
         event.setImageId(newImageId);
+        event.setImageUrl(String.format(
+                "/api/images/%d",
+                newImageId
+        ));
         repository.update(event);
         Map<String, Object> result = new HashMap<>();
         result.put("imageId", newImageId);
@@ -125,6 +130,9 @@ public class EventService {
         Long imageId = event.getImageId();
         if (imageId != null) {
             imageRepository.delete(imageId);
+            event.setImageUrl(null);
+            event.setImageId(null);
+            repository.update(event);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,

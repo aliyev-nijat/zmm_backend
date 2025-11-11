@@ -1,4 +1,3 @@
-/* General Body and Layout */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f7f9;
@@ -16,7 +15,6 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Buttons */
 button {
     background-color: #007bff;
     color: white;
@@ -33,7 +31,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Table Styling (Displaying Events) */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -63,7 +60,6 @@ tbody tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Image within Table */
 td img {
     max-width: 150px;
     height: auto;
@@ -71,7 +67,6 @@ td img {
     display: block;
 }
 
-/* Form Styling (Create/Update) */
 form {
     display: flex;
     flex-direction: column;
@@ -94,7 +89,7 @@ form input[type="number"] {
     border-radius: 4px;
     font-size: 16px;
     width: 100%;
-    box-sizing: border-box; /* Ensures padding doesn't increase total width */
+    box-sizing: border-box;
 }
 
 form textarea {
@@ -102,7 +97,6 @@ form textarea {
     min-height: 100px;
 }
 
-/* Image Preview in Update Form */
 form img {
     max-width: 300px;
     max-height: 200px;
@@ -113,7 +107,6 @@ form img {
     object-fit: contain;
 }
 
-/* Specific button styles within forms */
 form button[type="submit"] {
     align-self: flex-start;
     margin-top: 20px;
@@ -124,10 +117,8 @@ form button[type="submit"]:hover {
     background-color: #1e7e34;
 }
 
-/* Style for "Şəkil əlavə edilməyib" */
 span[style="color: red;"] {
     font-weight: bold;
-    /* Optional: add a small background for visibility */
     background-color: #ffe0e0;
     padding: 5px;
     border-radius: 3px;
