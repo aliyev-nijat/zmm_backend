@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     implementation("io.github.cdimascio:dotenv-java:3.0.2")
