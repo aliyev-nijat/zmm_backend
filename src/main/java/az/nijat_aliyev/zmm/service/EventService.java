@@ -58,6 +58,7 @@ public class EventService {
     }
 
     public void deleteById(Long id) {
+        deleteImage(id);
         repository.delete(id);
     }
 
