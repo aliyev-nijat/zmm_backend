@@ -37,4 +37,5 @@ public class EventDto {
 
     @Null
     private String imageUrl;
+    private Long imageId;
 }

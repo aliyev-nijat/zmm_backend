@@ -24,4 +24,5 @@ public class EventEntity {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dateTime;
     private String imageUrl;
+    private Long imageId;
 }

@@ -75,14 +75,14 @@ class Api {
     }
 
     static uploadImage(id, body) {
-        return fetch(`/api/images/events/${id}`, {
+        return fetch(`/api/events/${id}/image`, {
             method: 'POST',
             body
         });
     }
 
     static deleteImage(id) {
-        return fetch(`/api/images/events/${id}`, {
+        return fetch(`/api/events/${id}/image`, {
             method: 'DELETE'
         })
     }
@@ -161,14 +161,14 @@ class Updating {
             <label for="dateTime">Tarix</label>
             <input type="datetime-local" name="dateTime" id="dateTime" value="${event.dateTime}">
             <label for="update-file">Şəkil</label>
-            <input type="file" name="file" id="update-file" accept="image/">
-                <img src="${event.imageUrl || ""}"> 
+            <input type="file" name="image" id="update-file" accept="image/">
+                <img src="${event.imageId ? `/api/images/${event.imageId}` : ""}"> 
             <button type="submit">Redaktə et</button>
             `;
                 Util.connectInputToImg(
                     form.querySelector("#update-file"),
                     form.querySelector("img"),
-                    event.imageUrl || ""
+                    event.imageUrl == null ? "" : event.imageUrl
                 );
                 form.addEventListener("submit", e => Updating.submitEventListener(e, id));
 
@@ -204,10 +204,10 @@ class Updating {
             .then(data => {
                 const fileInput = e.target.querySelector("#update-file");
                 if (fileInput.files.length != 0) {
-                    const file = fileInput.files[0];
+                    const image = fileInput.files[0];
                     const imageFormData = new FormData();
-                    imageFormData.append('file', file);
-                    Api.uploadImage(id, formData)
+                    imageFormData.append('image', image);
+                    Api.uploadImage(id, imageFormData)
                         .then(r => {
                             if (r.status != 200) throw Error();
                         })
