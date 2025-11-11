@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class EventEntity {
     private String title;
 
     @Column(nullable = false)
+    @Lob
     private String about;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
