@@ -28,12 +28,17 @@
         position: relative;
         .slide-viewport {
           overflow: hidden;
-          cursor: grab;
-          -webkit-overflow-scrolling: touch;
           touch-action: pan-y;
+          user-select: none;
+          -webkit-user-drag: none;
+          cursor: grab;
+
           &.dragging {
             cursor: grabbing;
             user-select: none;
+          }
+          .dragging * {
+            pointer-events: none;
           }
           &:active {
             cursor: grabbing;
@@ -57,12 +62,16 @@
               display: flex;
               flex-direction: column;
               min-height: 100%;
-              .sliderImgBox img {
+              .sliderImgBox {
                 border-radius: 14px;
-                width: 100%;
-                height: 310px;
-                object-fit: cover;
-                display: block;
+                img {
+                  border-radius: 14px;
+
+                  width: 100%;
+                  height: 310px;
+                  object-fit: cover;
+                  display: block;
+                }
               }
               .sliderContetBox {
                 color: #0f0e12;
@@ -97,6 +106,10 @@
               }
             }
           }
+        }
+        .slide-viewport * {
+          user-select: none;
+          -webkit-user-drag: none;
         }
         .slide-scrollbar {
           max-width: 520px;

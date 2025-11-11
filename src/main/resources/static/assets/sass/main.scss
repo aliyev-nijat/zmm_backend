@@ -1,8 +1,9 @@
 @use "base/reset";
 @use "layout/nav";
+@use "layout/header";
 @use "layout/pages_header";
-@use "pages/landing.scss";
-@use "pages/pagesStyle.scss";
+@use "pages/landing";
+@use "pages/pagesStyle";
 // @use "pages/details.scss";
 // @use "pages/login.scss";
-@use "layout/footer.scss";
+@use "layout/footer";
