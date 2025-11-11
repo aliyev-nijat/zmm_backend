@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:h2:file:/home/site/db/testdb
+    url: jdbc:h2:file:/home/site/db/testdb #preprod
+    #url: jdbc:h2:file:./db/testdb #dev
     driver-class-name: org.h2.Driver
     username: sa
     password:
