@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            background-color: #343a40;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+        }
+
+        iframe {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            min-height: 70vh;
+            height: auto;
+        }
+    </style>
 </head>
+
 <body>
-    <a href="./events.html">Tədbirlər</a>
-    <a href="./slider.html">Slider</a>
+    <nav>
+        <a href="./events.html">Tədbirlər</a>
+        <a href="./slider.html">Slider</a>
+    </nav>
+    <iframe src="/" width="97%" height="400"></iframe>
 </body>
+
 </html>
