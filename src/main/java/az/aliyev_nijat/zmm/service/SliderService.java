@@ -35,9 +35,8 @@ public class SliderService {
         if (oldImageId != null) {
             imageRepository.delete(oldImageId);
         }
-        String extension = image
-                .getOriginalFilename()
-                .split("\\.")[1];
+        String[] splited = image.getOriginalFilename().split("\\.");
+        String extension = splited[splited.length - 1];
         byte[] content;
         try {
             content = image.getBytes();
