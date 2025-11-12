@@ -39,10 +39,10 @@ public class SliderController {
                 .build();
     }
 
-    @GetMapping("/init")
+    /*@GetMapping("/init")
     public ResponseEntity<Void> init() {
         service.init();
 
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -65,7 +64,7 @@ public class SliderService {
                 .toList();
     }
 
-    public void init() {
+    /*public void init() {
         List<SliderEntity> sliderEntities = new LinkedList<>();
         sliderEntities.add(new SliderEntity());
         sliderEntities.add(new SliderEntity());
@@ -78,5 +77,5 @@ public class SliderService {
             slide.setImageId(-1L);
             repository.save(slide);
         });
-    }
+    }*/
 }
