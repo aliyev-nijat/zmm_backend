@@ -112,7 +112,9 @@ class Creation {
     static getCreatForm() {
         let form = document.createElement('form');
         form.setAttribute("id", "create-form");
-        form.innerHTML = `<label for="title">Başlıq (title)</label>
+        form.innerHTML = `<label for="order">Sıra</label>
+        <input type="number" name="order" id="order">
+        <label for="title">Başlıq (title)</label>
         <input type="text" name="title" id="title">
         <label for="about">Haqqında</label>
         <textarea name="about" id="about"></textarea>
@@ -174,6 +176,8 @@ class Updating {
                 form.innerHTML = `
             <label for="id">ID</label>
             <input type="number" name="id" id="id" disabled value="${event.id}">
+            <label for="order">Sıra</label>
+            <input type="number" name="order" id="order" value="${event.order}">
             <label for="title">Başlıq (title)</label>
             <input type="text" name="title" id="title" value="${Util.escapeForAttribute(event.title)}">
             <label for="about">Haqqında</label>
@@ -255,6 +259,7 @@ class Page {
         table.innerHTML = `<thead>
         <tr>
         <th>ID</th>
+        <th>Sıra</th>
         <th>Başlıq</th>
         <th>Haqqında</th>
         <th>Tarix</th>
@@ -280,6 +285,7 @@ class Page {
                         set.element
                             .innerHTML = `
                 <td>${set.event.id}</td>
+                <td>${set.event.order}</td>
                 <td>${set.event.title}</td>
                 <td>${Util.escapeForAttribute(set.event.about)}</td>
                 <td>${`Tarix: ${set.event.dateTime.split("T")[0]}, 

@@ -25,7 +25,7 @@ public class AuthController {
 
     private final CustomUserDetailsService service;
 
-    @GetMapping("/create/root/{password}")
+    //@GetMapping("/create/root/{password}")
     public ResponseEntity<Void> createRoot(
             @PathVariable String password
     ) {

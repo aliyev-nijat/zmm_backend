@@ -43,4 +43,7 @@ public class EventEntity {
     private String imageUrl;
     @Column()
     private Long imageId;
+
+    @Column(name = "event_order")
+    private Long order;
 }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class EventService {
         return repository.findAll()
                 .stream()
                 .map(mapper::map)
+                .sorted(Comparator.comparing(EventDto::getOrder, Comparator.nullsLast(Long::compareTo)))
                 .toList();
     }
 

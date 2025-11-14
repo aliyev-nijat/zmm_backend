@@ -15,6 +15,7 @@ public class EventMapper {
         target.setDateTime(source.getDateTime());
         target.setImageUrl(source.getImageUrl());
         target.setImageId(source.getImageId());
+        target.setOrder(source.getOrder());
 
         return target;
     }
@@ -27,6 +28,7 @@ public class EventMapper {
         target.setDateTime(source.getDateTime());
         target.setImageUrl(source.getImageUrl());
         target.setImageId(source.getImageId());
+        target.setOrder(source.getOrder());
 
         return target;
     }
