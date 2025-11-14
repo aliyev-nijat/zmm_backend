@@ -26,8 +26,20 @@ class Api {
     static uploadImage(id, body) {
         return fetch(`/api/slider/${id}`, {
             method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            },
             body
         });
+    }
+
+    static getUser() {
+        return fetch("/api/auth/user", {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            }
+        })
     }
 }
 
@@ -59,7 +71,7 @@ function loadPage() {
                 imgInput.setAttribute("name", "image");
                 imgInput.setAttribute("accept", "image/");
                 set.imgInputElement = imgInput;
-                Util.connectInputToImg(imgInput,set.imgElement, 
+                Util.connectInputToImg(imgInput, set.imgElement,
                     set.slide.imageUrl == null ? "" : set.slide.imageUrl
                 )
 
@@ -102,7 +114,7 @@ function loadPage() {
                 let slideContainer = document.createElement("div");
                 slideContainer.appendChild(form);
                 slideContainer.appendChild(set.imgElement);
-                
+
                 return slideContainer
             })
             .forEach(slideContainer => container.appendChild(slideContainer))
@@ -110,4 +122,20 @@ function loadPage() {
         .catch(() => alert("Xəta: Şəkillər yüklənmədi"));
 }
 
-loadPage();
+if (localStorage.getItem("zmmtoken") == null) {
+    window.location.href = "./login.html";
+}
+else {
+    Api.getUser()
+        .then(r => {
+            if (r.status != 200) throw Error();
+            return r.json();
+        })
+        .then(data => {
+            console.log(data)
+            loadPage();
+        })
+        .catch(() => window.location.href = "./login.html");
+}
+
+
