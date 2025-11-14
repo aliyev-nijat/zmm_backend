@@ -15,8 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -192,5 +197,18 @@ public class CourseService {
                     "Image already not exists"
             );
         }
+    }
+
+    public List<CourseDto> getAll() {
+        Random random = new Random();
+        List<CourseDto> result = new LinkedList<>();
+        repository
+                .findAll()
+                .stream()
+                .map(mapper::map)
+                .forEach(result::add);
+        Collections.shuffle(result);
+
+        return  result;
     }
 }
