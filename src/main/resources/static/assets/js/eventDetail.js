@@ -1,13 +1,12 @@
 
-import { host } from "./headerSlider.js"
+import { host } from "./events.js"
 
-// URL-dən id götür
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 if (!id) console.error("ID tapılmadı!");
 
-// Köməkçi element yaratma funksiyası
 function createEl(tag, className, parent) {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -15,12 +14,10 @@ function createEl(tag, className, parent) {
   return el;
 }
 
-// Ana boxlar
 const detailBox = document.querySelector(".eventDetail");
 const imgBox = document.querySelector(".eventDetailImgBox");
 const contentBox = document.querySelector(".eventDetailContetBox");
 
-// API-dən fetch
 fetch(`${host}/api/events/${id}`)
   .then((r) => r.json())
   .then((data) => fillDetail(data))
