@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import az.aliyev_nijat.zmm.service.CourseService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,6 +32,11 @@ public class CourseController {
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CourseDto>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PreAuthorize("hasRole('ADMIN')")

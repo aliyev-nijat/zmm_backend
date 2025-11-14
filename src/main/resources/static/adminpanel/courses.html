@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurslar</title>
+    <link rel="stylesheet" href="./events.css">
+</head>
+
+<body>
+    <div id="container">
+        <form>
+            <label for="title">Başlıq</label>
+            <input required type="text" name="title" id="title">
+            <label for="about">Haqqında</label>
+            <textarea required name="about" id="about"></textarea>
+            <label for="teacherFirstName">Müəllimin adı</label>
+            <input required type="text" name="teacherFirstName" id="teacherFirstName">
+            <label for="teacherLastName">Müəllimin soyadı</label>
+            <input required type="text" name="teacherLastName" id="teacherLastName">
+            <label for="teacherAbout">Müəllim haqqında</label>
+            <textarea required name="teacherAbout" id="teacherAbout"></textarea>
+            <button>Əlavə et</button>
+        </form>
+        <form id="image-form">
+            <label for="image">Kursun şəkili</label>
+            <input type="file" name="image" id="image" accept="image/">
+            <img src="" id="img-prev">
+        </form>
+        <form id="teacher-image-form">
+            <label for="image">Müəllimin şəkili</label>
+            <input type="file" name="image" id="image" accept="image/">
+            <img src="" id="teacher-img-prev">
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Başlıq</th>
+                    <th>Haqqında</th>
+                    <th>Müəllim</th>
+                    <th>Kursun şəkili</th>
+                    <th>Müəllimin şəkili</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let imageForm = document.querySelector("#image-form");
+        let teacherImageForm = document.querySelector("#teacher-image-form");
+        let tbody = document.querySelector("tbody");
+
+        fetch("/api/courses")
+        .then(r => r.json())
+        .then(courses => courses
+            .map(course => ({course, tr: document.createElement('tr')}))
+            .map(set => {
+                let td = document.createElement("td");
+                td.innerText = set.course.id;
+                set.tr.appendChild(td);
+                return set;
+            })
+            .map(set => {
+                let td = document.createElement("td");
+                td.innerText = set.course.title;
+                set.tr.appendChild(td);
+                return set;
+            })
+            .map(set => {
+                let td = document.createElement("td");
+                td.innerText = set.course.about;
+                set.tr.appendChild(td);
+                return set;
+            })
+            .map(set => {
+                let td = document.createElement("td");
+                const course = set.course;
+                td.innerHTML = `<i>${course.teacherFirstName} ${course.teacherFirstName}</i>
+                <br> ${course.teacherAbout}`;
+                set.tr.appendChild(td);
+                return set;
+            })
+            .map(set => {
+                let td = document.createElement("td");
+                set.tr.appendChild(td);
+                if (set.course.imageUrl == null) return set;
+                let img = document.createElement("img");
+                const course = set.course;
+                img.setAttribute("src", course.imageUrl);
+                td.appendChild(img);
+                return set;
+            })
+            .map(set => {
+                let td = document.createElement("td");
+                set.tr.appendChild(td);
+                if (set.course.teacherImageUrl == null) return set;
+                let img = document.createElement("img");
+                const course = set.course;
+                img.setAttribute("src", course.teacherImageUrl);
+                td.appendChild(img);
+                return set;
+            })
+            .map(set => set.tr)
+            .forEach(tr => tbody.appendChild(tr))
+        )
+
+        function connectInputToImg(input, img, defaultUrl) {
+            input.addEventListener('change', () => {
+                const file = input.files && input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        img.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+                else {
+                    img.src = defaultUrl;
+                }
+            })
+        }
+        connectInputToImg(
+            imageForm.querySelector("input"),
+            imageForm.querySelector("img"),
+            ""
+        )
+        connectInputToImg(
+            teacherImageForm.querySelector("input"),
+            teacherImageForm.querySelector("img"),
+            ""
+        )
+
+        function submitImageForm(id) {
+            const fileInput = imageForm.querySelector("input");
+            if (fileInput.files.length != 0) {
+                const image = fileInput.files[0];
+                const imageFormData = new FormData();
+                imageFormData.append('image', image);
+                fetch(`/api/courses/${id}/image`, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                    },
+                    body: imageFormData
+                });
+            }
+        }
+
+        function submitTeacherImageForm(id) {
+            const fileInput = teacherImageForm.querySelector("input");
+            if (fileInput.files.length != 0) {
+                const image = fileInput.files[0];
+                const imageFormData = new FormData();
+                imageFormData.append('image', image);
+                fetch(`/api/courses/${id}/teacher/image`, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                    },
+                    body: imageFormData
+                });
+            }
+        }
+
+        function getUser() {
+            return fetch("/api/auth/user", {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                }
+            })
+        }
+        if (localStorage.getItem("zmmtoken") == null) {
+            window.location.href = "./login.html";
+        }
+        else {
+            getUser()
+                .then(r => {
+                    if (r.status != 200) throw Error();
+                    return r.json();
+                })
+                .catch(() => window.location.href = "./login.html");
+        }
+        let form = document.querySelector("form");
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+            const body = Object.fromEntries(formData.entries());
+            console.log(body);
+            fetch('/api/courses', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+                .then(r => {
+                    if (r.status == 200) {
+                        alert("Kurs yaradıldı");
+                        
+
+                        return r.json();
+                    }
+                    else {
+                        alert("Xəta baş verdi")
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        const id = data.id;
+                        submitImageForm(id);
+                        submitTeacherImageForm(id);
+                        form.reset();
+                        imageForm.reset();
+                        teacherImageForm.reset();
+                    }
+                })
+                .catch(() => alert("Xəta baş verdi!"));
+        })
+    </script>
+</body>
+
+</html>
