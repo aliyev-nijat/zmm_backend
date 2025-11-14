@@ -50,16 +50,22 @@
       rafId = requestAnimationFrame(step);
     };
 
-    const onPointerDown = (e) => {
-      viewport.setPointerCapture(e.pointerId);
-      dragging = true;
-      viewport.classList.add("dragging");
-      stopMomentum();
-      startX = e.clientX;
-      startScroll = row.scrollLeft;
-      lastT = performance.now();
-      lastX = startX;
-    };
+   const onPointerDown = (e) => {
+  // Əgər klik olunan yer buton, link və ya input-dursa – sürüşdürmə başlamasın
+  if (e.target.closest("button, a, input, textarea")) {
+    return;
+  }
+
+  viewport.setPointerCapture(e.pointerId);
+  dragging = true;
+  viewport.classList.add("dragging");
+  stopMomentum();
+  startX = e.clientX;
+  startScroll = row.scrollLeft;
+  lastT = performance.now();
+  lastX = startX;
+};
+
 
     const onPointerMove = (e) => {
       if (!dragging) return;

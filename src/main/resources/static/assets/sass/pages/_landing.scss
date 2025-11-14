@@ -62,7 +62,7 @@
               display: flex;
               flex-direction: column;
               min-height: 100%;
-
+             
               .sliderImgBox {
                 border-radius: 14px;
                 img {
@@ -75,6 +75,7 @@
                 }
               }
               .sliderContetBox {
+                
                 color: #0f0e12;
                 .sliderName {
                   font-size: 18px;

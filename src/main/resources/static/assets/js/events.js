@@ -1,4 +1,6 @@
-const host = "http://165.232.122.28:8080";
+
+import { host } from "./headerSlider.js"
+
 const slideRow = document.querySelector(".slide-row");
 fetch(`${host}/api/events`)
   .then((r) => r.json())
@@ -50,6 +52,7 @@ function renderSlides(data) {
     span.innerHTML = `${datePart}<br>${timePart}`;
 
     btn.addEventListener("click", (e) => {
+      
       window.location.href = `eventDetail.html?id=${ev.id}`;
     });
   });
