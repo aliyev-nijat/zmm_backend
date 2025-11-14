@@ -156,6 +156,5 @@ public class EventService {
                     "Image already not exists"
             );
         }
-
     }
 }
