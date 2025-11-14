@@ -1,4 +1,6 @@
-const host = "http://165.232.122.28:8080";
+
+export const host = "";
+
 const slideRow = document.querySelector(".slide-row");
 fetch(`${host}/api/events`)
   .then((r) => r.json())
@@ -28,7 +30,6 @@ function renderSlides(data) {
     const img = createEl("img", "", imgBox);
     if (ev.imageUrl !== null) {
       img.src = `${host}${ev.imageUrl}`;
-      // Şəkil yüklənəndə yeniləmə
       img.onload = requestUpdateThumb;
     } else {
       imgBox.style.backgroundColor = "#5b525b";
@@ -50,15 +51,14 @@ function renderSlides(data) {
     span.innerHTML = `${datePart}<br>${timePart}`;
 
     btn.addEventListener("click", (e) => {
+      
       window.location.href = `eventDetail.html?id=${ev.id}`;
     });
   });
 
-  // BÜTÜN SLİDE-LƏR ƏLAVƏ OLDUQDAN SONRA
   requestUpdateThumb();
 }
 
-// updateThumb-u çox çağırmamaq üçün debounced funksiya
 let updateTimeout;
 function requestUpdateThumb() {
   clearTimeout(updateTimeout);
@@ -66,7 +66,7 @@ function requestUpdateThumb() {
     document.querySelectorAll(".slide-viewport").forEach((viewport) => {
       const row = viewport.querySelector(".slide-row");
       if (row) {
-        // slider.js-dəki updateThumb funksiyasını çağırırıq
+
         const event = new Event("scroll");
         row.dispatchEvent(event);
         window.dispatchEvent(new Event("resize"));

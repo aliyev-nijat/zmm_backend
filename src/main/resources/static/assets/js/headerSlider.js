@@ -1,17 +1,4 @@
-const tempData = [
-  {
-    title: "ZiMODA2025",
-    subtitle: "ZiRaDa ZOVQ Va YARADICILIQ MaRKazi",
-    date: "30 AVQUST 2025",
-    warning: "QEYDiYYAT UCUN SON TARiX 15 AVQUST",
-  },
-  {
-    title: "Növbəti Slayd",
-    subtitle: "Alt başlıq 2",
-    date: "25 SENTYABR 2025",
-    warning: "SON TARİX 10 SENTYABR",
-  },
-];
+export const host = "";
 
 fetch(`${host}/api/slider`)
   .then((r) => r.json())
@@ -30,9 +17,6 @@ function buildSlides(list) {
     s.className = "slide" + (idx === 0 ? " active" : "");
 
     s.style.backgroundImage = `url(${host}${it.imageUrl})`;
-   
-
- 
 
     slider.appendChild(s);
   });
@@ -101,5 +85,4 @@ function handleSwipe() {
   if (endX > startX + 40) goToSlide(current - 1);
 }
 
-buildSlides(tempData);
 setInterval(nextSlide, 5000);
