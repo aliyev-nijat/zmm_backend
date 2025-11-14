@@ -41,7 +41,6 @@ public class EventEntity {
     @Column(nullable = false)
     private LocalDateTime dateTime;
     private String imageUrl;
-    @Column()
     private Long imageId;
 
     @Column(name = "event_order")

@@ -22,7 +22,8 @@ public class CourseEntity {
     @Lob
     private String about;
 
-    private String imagePath;
+    private String imageUrl;
+    private Long imageId;
 
     @Column(nullable = false)
     private String teacherFirstName;
@@ -31,6 +32,8 @@ public class CourseEntity {
     private String teacherLastName;
 
     @Column(nullable = false)
+    @Lob
     private String teacherAbout;
-    private String teacherImagePath;
+    private String teacherImageUrl;
+    private Long teacherImageId;
 }
