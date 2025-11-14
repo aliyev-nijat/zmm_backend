@@ -186,7 +186,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 12; i++) {
             int index = random.nextInt(chars.length());
             sb.append(chars.charAt(index));
         }
