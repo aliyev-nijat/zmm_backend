@@ -30,8 +30,7 @@ function buildSlides(list) {
     s.className = "slide" + (idx === 0 ? " active" : "");
 
     s.style.backgroundImage = `url(${host}${it.imageUrl})`;
-    s.style.backgroundSize = "cover";
-    s.style.backgroundPosition = "center";
+   
 
  
 
