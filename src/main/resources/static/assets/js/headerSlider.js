@@ -1,4 +1,3 @@
-
 const tempData = [
   {
     title: "ZiMODA2025",
@@ -14,6 +13,12 @@ const tempData = [
   },
 ];
 
+fetch(`${host}/api/slider`)
+  .then((r) => r.json())
+  .then((data) => {
+    buildSlides(data);
+  });
+
 function buildSlides(list) {
   const slider = document.getElementById("slider");
   const dotsContainer = document.querySelector(".dots-container");
@@ -23,6 +28,12 @@ function buildSlides(list) {
   list.forEach((it, idx) => {
     const s = document.createElement("div");
     s.className = "slide" + (idx === 0 ? " active" : "");
+
+    s.style.backgroundImage = `url(${host}${it.imageUrl})`;
+    s.style.backgroundSize = "cover";
+    s.style.backgroundPosition = "center";
+
+ 
 
     slider.appendChild(s);
   });

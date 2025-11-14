@@ -110,7 +110,7 @@ header {
 header .slider-container {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 650px;
   overflow: hidden;
   background: #000;
   color: #fff;
@@ -128,6 +128,9 @@ header .slider-container .slide {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.7s ease-in-out;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: conver;
 }
 header .slider-container .slide.active {
   opacity: 1;
@@ -284,6 +287,7 @@ header .dots-wrapper .dots .dot.active {
   font-size: 18px;
   margin: 10px 0;
   font-family: "Playfair Display", serif;
+  min-height: 50px;
 }
 .pageSection .container .section_Container .sectionSlider .slide-viewport .slide-row .slide-slider .sliderContetBox .sliderContent {
   font-size: 14px;
@@ -302,6 +306,9 @@ header .dots-wrapper .dots .dot.active {
   border: 1px solid #5b525b;
   background-color: #fff;
   font-size: 16px;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
 }
 .pageSection .container .section_Container .sectionSlider .slide-viewport .slide-row .slide-slider .sliderContetBox .sliderFooter span {
   color: #0f0e12;
@@ -774,6 +781,50 @@ header .dots-wrapper .dots .dot.active {
     font-size: 14px;
   }
 }
+.eventDetail-section {
+  margin: 60px 0;
+}
+.eventDetail-section .container .eventDetail .eventDetailImgBox {
+  height: 428px;
+}
+.eventDetail-section .container .eventDetail .eventDetailImgBox img {
+  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  margin-top: 46px;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox .eventDetailDate {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox .eventDetailDate span {
+  font-size: 14px;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox .eventDetailName {
+  font-family: "Playfair Display", serif;
+  font-size: 48px;
+  margin: 46px 0;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox .eventDetailContent {
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+.eventDetail-section .container .eventDetail .eventDetailContetBox button {
+  padding: 10px 20px;
+  color: #5b525b;
+  border-radius: 8px;
+  border: 1px solid #5b525b;
+  background-color: #fff;
+  font-size: 16px;
+}
+
 footer {
   margin: 20px auto 0;
 }

@@ -1,5 +1,3 @@
-
-
 (function () {
   document.querySelectorAll(".slide-viewport").forEach((viewport) => {
     const row = viewport.querySelector(".slide-row");
@@ -13,11 +11,17 @@
 
     const updateThumb = () => {
       const m = maxScroll();
-      const ratio = m === 0 ? 1 : row.clientWidth / row.scrollWidth;
+      if (m === 0) {
+        thumb.style.width = "100%";
+        thumb.style.transform = "translateX(0px)";
+        return;
+      }
+
+      const ratio = row.clientWidth / row.scrollWidth;
       const w = Math.max(40, trackW() * ratio);
       thumb.style.width = w + "px";
-      const x = m > 0 ? (row.scrollLeft / m) * (trackW() - w) : 0;
-      thumb.style.transform = `translateX(${x}px)`;
+      const x = (row.scrollLeft / m) * (trackW() - w);
+      thumb.style.transform = `translateX(${clamp(x, 0, trackW() - w)}px)`;
     };
 
     let dragging = false,
