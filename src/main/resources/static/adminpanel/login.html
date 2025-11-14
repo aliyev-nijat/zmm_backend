@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <label for="username">İstifadəçi adı</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Şifrə</label>
+        <input type="password" name="password" id="password">
+        <button type="submit">Daxil ol</button>
+    </form>
+    <script>
+        let form = document.querySelector("form");
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            let formData = new FormData(e.target);
+            const requestBody = Object.fromEntries(formData.entries());
+            fetch('/api/auth/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(r => {
+                    if (r.status == 200) {
+                        return r.json();
+                    }
+                    else if (r.status == 401) {
+                        return null;
+                    }
+                    else {
+                        throw Error();
+                    }
+                })
+                .then(data => {
+                    if (data == null) {
+                        alert("İstifadəçi adı və ya şifrə yanlışdır");
+                    }
+                    else {
+                        localStorage.setItem("zmmtoken", data.token);
+                        window.location.href = "./index.html";
+                    }
+                })
+                .catch(() => console.log("Login uğurlu olmadı"))
+                .finally(() => e.target.reset());
+        })
+    </script>
+</body>
+
+</html>

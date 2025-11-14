@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class EventController {
         return ResponseEntity.ok(service.getById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<EventDto> create(
             @Valid @RequestBody EventDto event
@@ -54,6 +56,7 @@ public class EventController {
                         .ok(newEvent);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id
@@ -62,6 +65,7 @@ public class EventController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<EventDto> update(
             @PathVariable Long id,
@@ -70,6 +74,7 @@ public class EventController {
         return ResponseEntity.ok(service.update(id, event));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{eventId}/image")
     public ResponseEntity<Map<String, Object>> uploadImage(
             @PathVariable Long eventId,
@@ -78,6 +83,7 @@ public class EventController {
         return ResponseEntity.ok(service.uploadImage(eventId, image));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{eventId}/image")
     public ResponseEntity<Void> deleteImage(
             @PathVariable Long eventId

@@ -44,6 +44,7 @@ class Api {
         return fetch('/api/events', {
             method: 'POST',
             headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken"),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
@@ -62,6 +63,7 @@ class Api {
         return fetch(`/api/events/${id}`, {
             method: 'PUT',
             headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken"),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
@@ -70,20 +72,38 @@ class Api {
 
     static delete(id) {
         return fetch(`/api/events/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            }
         });
     }
 
     static uploadImage(id, body) {
         return fetch(`/api/events/${id}/image`, {
             method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            },
             body
         });
     }
 
     static deleteImage(id) {
         return fetch(`/api/events/${id}/image`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            }
+        })
+    }
+
+    static getUser() {
+        return fetch("/api/auth/user", {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+            }
         })
     }
 }
@@ -390,4 +410,17 @@ class Page {
     }
 }
 
-Page.loadPage();
+if (localStorage.getItem("zmmtoken") == null) {
+    window.location.href = "./login.html";
+}
+else {
+    Api.getUser()
+        .then(r => {
+            if (r.status != 200) throw Error();
+            return r.json();
+        })
+        .then(() => {
+            Page.loadPage();
+        })
+        .catch(() => window.location.href = "./login.html");
+}

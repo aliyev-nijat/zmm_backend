@@ -57,6 +57,26 @@
         <a href="./slider.html">Slider</a>
     </nav>
     <iframe src="/" width="97%" height="400"></iframe>
+    <script>
+        function getUser() {
+            return fetch("/api/auth/user", {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                }
+            })
+        }
+        if (localStorage.getItem("zmmtoken") == null) {
+            window.location.href = "./login.html";
+        }
+        else {
+            getUser()
+                .then(r => {
+                    if (r.status != 200) throw Error();
+                })
+                .catch(() => window.location.href = "./login.html");
+        }
+    </script>
 </body>
 
 </html>
