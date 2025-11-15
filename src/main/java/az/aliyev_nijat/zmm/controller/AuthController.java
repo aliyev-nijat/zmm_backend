@@ -83,7 +83,7 @@ public class AuthController {
         return ResponseEntity.ok(service.getCurrentUser());
     }
 
-    @GetMapping("/restore")
+    //@GetMapping("/restore")
     public ResponseEntity<Map<String, Object>> restore() {
         restoreService.restore();
         return ResponseEntity.ok(restoreService.getRestore());
