@@ -2,6 +2,7 @@ package az.aliyev_nijat.zmm.controller;
 
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.dto.LoginDto;
+import az.aliyev_nijat.zmm.model.entity.SliderEntity;
 import az.aliyev_nijat.zmm.model.entity.UserEntity;
 import az.aliyev_nijat.zmm.repository.CourseRepository;
 import az.aliyev_nijat.zmm.repository.EventRepository;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(
             @Valid @RequestBody LoginDto body
     ) {
-        Map<String,Object> user = service.login(body);
+        Map<String, Object> user = service.login(body);
         if (user == null) {
             Map<String, Object> errorMessage = new HashMap<>();
             errorMessage.put("message", "bad credentials");
@@ -83,6 +85,7 @@ public class AuthController {
 
     @GetMapping("/restore")
     public ResponseEntity<Map<String, Object>> restore() {
+        restoreService.restore();
         return ResponseEntity.ok(restoreService.getRestore());
     }
 }
