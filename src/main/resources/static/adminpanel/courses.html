@@ -25,12 +25,12 @@
         </form>
         <form id="image-form">
             <label for="image">Kursun şəkili</label>
-            <input type="file" name="image" id="image" accept="image/">
+            <input type="file" name="image" id="course-image" accept="image/*">
             <img src="" id="img-prev">
         </form>
         <form id="teacher-image-form">
             <label for="image">Müəllimin şəkili</label>
-            <input type="file" name="image" id="image" accept="image/">
+            <input type="file" name="image" id="teacher-image" accept="image/*">
             <img src="" id="teacher-img-prev">
         </form>
         <table>
@@ -42,6 +42,7 @@
                     <th>Müəllim</th>
                     <th>Kursun şəkili</th>
                     <th>Müəllimin şəkili</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -55,58 +56,75 @@
         let tbody = document.querySelector("tbody");
 
         fetch("/api/courses")
-        .then(r => r.json())
-        .then(courses => courses
-            .map(course => ({course, tr: document.createElement('tr')}))
-            .map(set => {
-                let td = document.createElement("td");
-                td.innerText = set.course.id;
-                set.tr.appendChild(td);
-                return set;
-            })
-            .map(set => {
-                let td = document.createElement("td");
-                td.innerText = set.course.title;
-                set.tr.appendChild(td);
-                return set;
-            })
-            .map(set => {
-                let td = document.createElement("td");
-                td.innerText = set.course.about;
-                set.tr.appendChild(td);
-                return set;
-            })
-            .map(set => {
-                let td = document.createElement("td");
-                const course = set.course;
-                td.innerHTML = `<i>${course.teacherFirstName} ${course.teacherFirstName}</i>
+            .then(r => r.json())
+            .then(courses => courses
+                .map(course => ({ course, tr: document.createElement('tr') }))
+                .map(set => {
+                    let td = document.createElement("td");
+                    td.innerText = set.course.id;
+                    set.tr.appendChild(td);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    td.innerText = set.course.title;
+                    set.tr.appendChild(td);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    td.innerText = set.course.about;
+                    set.tr.appendChild(td);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    const course = set.course;
+                    td.innerHTML = `<i>${course.teacherFirstName} ${course.teacherFirstName}</i>
                 <br> ${course.teacherAbout}`;
-                set.tr.appendChild(td);
-                return set;
-            })
-            .map(set => {
-                let td = document.createElement("td");
-                set.tr.appendChild(td);
-                if (set.course.imageUrl == null) return set;
-                let img = document.createElement("img");
-                const course = set.course;
-                img.setAttribute("src", course.imageUrl);
-                td.appendChild(img);
-                return set;
-            })
-            .map(set => {
-                let td = document.createElement("td");
-                set.tr.appendChild(td);
-                if (set.course.teacherImageUrl == null) return set;
-                let img = document.createElement("img");
-                const course = set.course;
-                img.setAttribute("src", course.teacherImageUrl);
-                td.appendChild(img);
-                return set;
-            })
-            .map(set => set.tr)
-            .forEach(tr => tbody.appendChild(tr))
-        )
+                    set.tr.appendChild(td);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    set.tr.appendChild(td);
+                    if (set.course.imageUrl == null) return set;
+                    let img = document.createElement("img");
+                    const course = set.course;
+                    img.setAttribute("src", course.imageUrl);
+                    td.appendChild(img);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    set.tr.appendChild(td);
+                    if (set.course.teacherImageUrl == null) return set;
+                    let img = document.createElement("img");
+                    const course = set.course;
+                    img.setAttribute("src", course.teacherImageUrl);
+                    td.appendChild(img);
+                    return set;
+                })
+                .map(set => {
+                    let td = document.createElement("td");
+                    set.tr.appendChild(td);
+                    let button = document.createElement("button");
+                    button.innerText = "Sil";
+                    button.addEventListener("click", e => {
+                        e.preventDefault();
+                        fetch(`/api/courses/${set.course.id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                            }
+                        })
+                    })
+                    td.appendChild(button);
+                    return set;
+                })
+                .map(set => set.tr)
+                .forEach(tr => tbody.appendChild(tr))
+            )
 
         function connectInputToImg(input, img, defaultUrl) {
             input.addEventListener('change', () => {
@@ -124,19 +142,21 @@
             })
         }
         connectInputToImg(
-            imageForm.querySelector("input"),
-            imageForm.querySelector("img"),
+            document.querySelector("#course-image"),
+            document.querySelector("#img-prev"),
             ""
         )
         connectInputToImg(
-            teacherImageForm.querySelector("input"),
-            teacherImageForm.querySelector("img"),
+            document.querySelector("#teacher-image"),
+            document.querySelector("#teacher-img-prev"),
             ""
         )
 
         function submitImageForm(id) {
-            const fileInput = imageForm.querySelector("input");
+            const fileInput = document.querySelector("#course-image");
+
             if (fileInput.files.length != 0) {
+                console.log(fileInput);
                 const image = fileInput.files[0];
                 const imageFormData = new FormData();
                 imageFormData.append('image', image);
@@ -146,12 +166,14 @@
                         "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
                     },
                     body: imageFormData
-                });
+                })
+                    .then(r => console.log(r.json));
             }
         }
 
         function submitTeacherImageForm(id) {
-            const fileInput = teacherImageForm.querySelector("input");
+            const fileInput = imageForm.querySelector("input");
+
             if (fileInput.files.length != 0) {
                 const image = fileInput.files[0];
                 const imageFormData = new FormData();
@@ -202,7 +224,7 @@
                 .then(r => {
                     if (r.status == 200) {
                         alert("Kurs yaradıldı");
-                        
+
 
                         return r.json();
                     }

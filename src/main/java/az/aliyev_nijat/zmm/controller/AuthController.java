@@ -2,19 +2,13 @@ package az.aliyev_nijat.zmm.controller;
 
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.dto.LoginDto;
-import az.aliyev_nijat.zmm.model.entity.SliderEntity;
 import az.aliyev_nijat.zmm.model.entity.UserEntity;
-import az.aliyev_nijat.zmm.repository.CourseRepository;
-import az.aliyev_nijat.zmm.repository.EventRepository;
-import az.aliyev_nijat.zmm.repository.SliderRepository;
 import az.aliyev_nijat.zmm.service.CustomUserDetailsService;
-import az.aliyev_nijat.zmm.service.RestoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,7 +24,6 @@ import java.util.Map;
 public class AuthController {
 
     private final CustomUserDetailsService service;
-    private final RestoreService restoreService;
 
     //@GetMapping("/create/root/{password}")
     public ResponseEntity<Void> createRoot(
@@ -81,11 +72,5 @@ public class AuthController {
     @PostMapping("/user")
     public ResponseEntity<UserEntity> getCurrentUser() {
         return ResponseEntity.ok(service.getCurrentUser());
-    }
-
-    @GetMapping("/restore")
-    public ResponseEntity<Map<String, Object>> restore() {
-        restoreService.restore();
-        return ResponseEntity.ok(restoreService.getRestore());
     }
 }
