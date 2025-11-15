@@ -172,7 +172,7 @@
         }
 
         function submitTeacherImageForm(id) {
-            const fileInput = imageForm.querySelector("input");
+            const fileInput = teacherImageForm.querySelector("input");
 
             if (fileInput.files.length != 0) {
                 const image = fileInput.files[0];
@@ -240,6 +240,8 @@
                         form.reset();
                         imageForm.reset();
                         teacherImageForm.reset();
+                        imageForm.querySelector("img").setAttribute("src","");
+                        teacherImageForm.querySelector("img").setAttribute("src","");
                     }
                 })
                 .catch(() => alert("Xəta baş verdi!"));

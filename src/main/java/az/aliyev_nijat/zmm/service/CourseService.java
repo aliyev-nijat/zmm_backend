@@ -30,6 +30,8 @@ public class CourseService {
     private final CourseRepository repository;
     private final ImageRepository imageRepository;
     private final CourseMapper mapper;
+    private final Object LOCK = new Object();
+
 
     public CourseDto getById(Long id) {
         return repository
@@ -79,42 +81,45 @@ public class CourseService {
             @NonNull Long courseId,
             MultipartFile image
     ) {
-        if (image == null || image.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        CourseEntity course = repository
-                .findById(courseId)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND)
-                );
-        Long oldImageId = course.getImageId();
-        if (oldImageId != null) {
-            imageRepository.delete(oldImageId);
-        }
-        String[] splited = image.getOriginalFilename().split("\\.");
-        String extension = splited[splited.length - 1];
-        byte[] content;
-        try {
-            content = image.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ImageEntity imageEntity = new ImageEntity();
-        imageEntity.setExtension(extension);
-        imageEntity.setContent(content);
-        ImageEntity newImageEntity = imageRepository.create(imageEntity);
-        Long newImageId = newImageEntity.getId();
-        course.setImageId(newImageId);
-        course.setImageUrl(String.format(
-                "/api/images/%d",
-                newImageId
-        ));
-        repository.save(course);
-        Map<String, Object> result = new HashMap<>();
-        result.put("imageId", newImageId);
-        result.put("imageUrl", String.format("/images/%d", newImageId));
+        synchronized (LOCK) {
 
-        return result;
+            if (image == null || image.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            CourseEntity course = repository
+                    .findById(courseId)
+                    .orElseThrow(() ->
+                            new ResponseStatusException(HttpStatus.NOT_FOUND)
+                    );
+            Long oldImageId = course.getImageId();
+            if (oldImageId != null) {
+                imageRepository.delete(oldImageId);
+            }
+            String[] splited = image.getOriginalFilename().split("\\.");
+            String extension = splited[splited.length - 1];
+            byte[] content;
+            try {
+                content = image.getBytes();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ImageEntity imageEntity = new ImageEntity();
+            imageEntity.setExtension(extension);
+            imageEntity.setContent(content);
+            ImageEntity newImageEntity = imageRepository.create(imageEntity);
+            Long newImageId = newImageEntity.getId();
+            course.setImageId(newImageId);
+            course.setImageUrl(String.format(
+                    "/api/images/%d",
+                    newImageId
+            ));
+            repository.save(course);
+            Map<String, Object> result = new HashMap<>();
+            result.put("imageId", newImageId);
+            result.put("imageUrl", String.format("/images/%d", newImageId));
+
+            return result;
+        }
     }
 
     public void deleteImage(@NonNull Long courseId) {
@@ -141,42 +146,44 @@ public class CourseService {
             @NonNull Long courseId,
             MultipartFile image
     ) {
-        if (image == null || image.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        CourseEntity course = repository
-                .findById(courseId)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND)
-                );
-        Long oldTeacherImageId = course.getTeacherImageId();
-        if (oldTeacherImageId != null) {
-            imageRepository.delete(oldTeacherImageId);
-        }
-        String[] splited = image.getOriginalFilename().split("\\.");
-        String extension = splited[splited.length - 1];
-        byte[] content;
-        try {
-            content = image.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ImageEntity imageEntity = new ImageEntity();
-        imageEntity.setExtension(extension);
-        imageEntity.setContent(content);
-        ImageEntity newImageEntity = imageRepository.create(imageEntity);
-        Long newTeacherImageId = newImageEntity.getId();
-        course.setTeacherImageId(newTeacherImageId);
-        course.setTeacherImageUrl(String.format(
-                "/api/images/%d",
-                newTeacherImageId
-        ));
-        repository.save(course);
-        Map<String, Object> result = new HashMap<>();
-        result.put("imageId", newTeacherImageId);
-        result.put("imageUrl", String.format("/images/%d", newTeacherImageId));
+        synchronized (LOCK) {
+            if (image == null || image.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            CourseEntity course = repository
+                    .findById(courseId)
+                    .orElseThrow(() ->
+                            new ResponseStatusException(HttpStatus.NOT_FOUND)
+                    );
+            Long oldTeacherImageId = course.getTeacherImageId();
+            if (oldTeacherImageId != null) {
+                imageRepository.delete(oldTeacherImageId);
+            }
+            String[] splited = image.getOriginalFilename().split("\\.");
+            String extension = splited[splited.length - 1];
+            byte[] content;
+            try {
+                content = image.getBytes();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ImageEntity imageEntity = new ImageEntity();
+            imageEntity.setExtension(extension);
+            imageEntity.setContent(content);
+            ImageEntity newImageEntity = imageRepository.create(imageEntity);
+            Long newTeacherImageId = newImageEntity.getId();
+            course.setTeacherImageId(newTeacherImageId);
+            course.setTeacherImageUrl(String.format(
+                    "/api/images/%d",
+                    newTeacherImageId
+            ));
+            repository.save(course);
+            Map<String, Object> result = new HashMap<>();
+            result.put("imageId", newTeacherImageId);
+            result.put("imageUrl", String.format("/images/%d", newTeacherImageId));
 
-        return result;
+            return result;
+        }
     }
 
     public void deleteTeacherImage(@NonNull Long courseId) {
@@ -209,6 +216,6 @@ public class CourseService {
                 .forEach(result::add);
         Collections.shuffle(result);
 
-        return  result;
+        return result;
     }
 }
