@@ -9,8 +9,10 @@
       gap: 20px;
       grid-template-columns: repeat(4, 1fr);
       justify-content: space-between;
+      row-gap: 50px;
       .event-card {
         .eventImgBox {
+          border-radius: 14px;
           img {
             border-radius: 14px;
             width: 100%;
@@ -27,6 +29,7 @@
             font-size: 18px;
             margin: 10px 0;
             font-family: "Playfair Display", serif;
+            min-height: 50px;
           }
           .eventCardContent {
             font-size: 14px;
@@ -34,10 +37,18 @@
             line-height: 1.3;
             color: #2e2c2e;
             font-family: "Poppins", sans-serif;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3; /* 3 sətir */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
           }
           .eventCardFooter {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+
             button {
               padding: 10px 20px;
               color: #5b525b;
@@ -45,6 +56,7 @@
               border: 1px solid #5b525b;
               background-color: #fff;
               font-size: 16px;
+              cursor: pointer;
             }
             span {
               color: #0f0e12;
@@ -66,6 +78,7 @@
       gap: 20px;
       grid-template-columns: repeat(4, 1fr);
       justify-content: space-between;
+      row-gap: 50px;
       .course-card {
         .courseImgBox {
           img {
@@ -85,6 +98,7 @@
             margin-bottom: 18px;
             font-size: 18px;
             font-family: "Playfair Display", serif;
+            min-height: 50px;
           }
 
           .courseCardFooter {
@@ -95,6 +109,7 @@
               border: 1px solid #5b525b;
               background-color: #fff;
               font-size: 16px;
+              cursor: pointer;
             }
           }
         }
@@ -102,17 +117,30 @@
     }
   }
 }
-
+@media screen and (max-width: 1230px) {
+  #events-section {
+    .container {
+      .events-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+  #courses-section {
+    .container {
+      .courses-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+}
 @media screen and (max-width: 1024px) {
   #events-section {
-  
     .container {
       .events-container {
         grid-template-columns: repeat(2, 1fr);
 
         .event-card {
           .eventContetBox {
-           
             .eventCardContent {
               font-size: 14px;
             }
@@ -132,20 +160,16 @@
     }
   }
   #courses-section {
-   
     .container {
       .courses-container {
         grid-template-columns: repeat(2, 1fr);
         .course-card {
           .courseContetBox {
-           
-      
             .courseCardFooter {
               button {
                 padding: 10px 20px;
                 font-size: 16px;
               }
-              
             }
           }
         }
@@ -182,8 +206,7 @@
     }
   }
 
-    #courses-section {
-   
+  #courses-section {
     .container {
       .courses-container {
         grid-template-columns: repeat(1, 1fr);
@@ -192,13 +215,12 @@
             .courseCardName {
               font-size: 16px;
             }
-           
+
             .courseCardFooter {
               button {
                 padding: 8px 16px;
                 font-size: 14px;
               }
-              
             }
           }
         }
