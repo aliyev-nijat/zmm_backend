@@ -128,9 +128,9 @@ header .slider-container .slide {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.7s ease-in-out;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: conver;
 }
 header .slider-container .slide.active {
   opacity: 1;
@@ -494,79 +494,6 @@ header .dots-wrapper .dots .dot.active {
   opacity: 0.85;
 }
 
-#contact-section {
-  width: 100%;
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  position: relative;
-  margin-top: 150px;
-}
-#contact-section .backElem {
-  width: 50%;
-  position: absolute;
-  background-color: #b9b8b9;
-  min-height: 493px;
-  bottom: 0;
-  z-index: 1;
-  border-bottom-right-radius: 24px;
-  border-top-right-radius: 24px;
-}
-#contact-section .container .contact-header {
-  margin-bottom: 45px;
-  font-family: "Playfair Display";
-  font-weight: 400;
-  font-size: 48px;
-  color: #5b525b;
-}
-#contact-section .contact-ContentBox {
-  width: 100%;
-  background-image: url("../images/contact/map.png");
-  background-repeat: no-repeat;
-  background-position: right;
-  min-height: 493px;
-  z-index: -999px;
-}
-#contact-section .contact-ContentBox .contact-info {
-  z-index: 999px !important;
-  padding-top: 108px;
-}
-#contact-section .contact-ContentBox .contact-info .container {
-  position: relative;
-  z-index: 2;
-}
-#contact-section .contact-ContentBox .contact-info .container .contact-infoHead {
-  font-family: Inter;
-  font-weight: 400;
-  margin-bottom: 25px;
-  font-size: 36px;
-}
-#contact-section .contact-ContentBox .contact-info .container .contact-infoText {
-  font-family: Inter;
-  font-weight: 400;
-  margin-bottom: 25px;
-  font-size: 20px;
-}
-#contact-section .contact-ContentBox .contact-info .container .contact-infoText p {
-  margin-bottom: 10px;
-}
-#contact-section .contact-ContentBox .contact-info .container .contact-infoSocial {
-  display: flex;
-  gap: 20px;
-}
-#contact-section .contact-ContentBox .contact-map {
-  flex: 1.5;
-  min-width: 300px;
-  position: relative;
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  z-index: 2;
-}
-
 @media (max-width: 640px) {
   .sliderImgBox img {
     height: 150px;
@@ -640,6 +567,30 @@ header .dots-wrapper .dots .dot.active {
     display: block;
   }
 }
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px; /* istədiyin hündürlük */
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.map-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(0.1) contrast(1.1);
+}
+
+.map-overlay-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+
 .about-page {
   margin: 100px 0 !important;
 }
@@ -652,6 +603,10 @@ header .dots-wrapper .dots .dot.active {
   gap: 20px;
   grid-template-columns: repeat(4, 1fr);
   justify-content: space-between;
+  row-gap: 50px;
+}
+#events-section .container .events-container .event-card .eventImgBox {
+  border-radius: 14px;
 }
 #events-section .container .events-container .event-card .eventImgBox img {
   border-radius: 14px;
@@ -669,6 +624,7 @@ header .dots-wrapper .dots .dot.active {
   font-size: 18px;
   margin: 10px 0;
   font-family: "Playfair Display", serif;
+  min-height: 50px;
 }
 #events-section .container .events-container .event-card .eventContetBox .eventCardContent {
   font-size: 14px;
@@ -676,10 +632,17 @@ header .dots-wrapper .dots .dot.active {
   line-height: 1.3;
   color: #2e2c2e;
   font-family: "Poppins", sans-serif;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 3 sətir */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 #events-section .container .events-container .event-card .eventContetBox .eventCardFooter {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 #events-section .container .events-container .event-card .eventContetBox .eventCardFooter button {
   padding: 10px 20px;
@@ -688,6 +651,7 @@ header .dots-wrapper .dots .dot.active {
   border: 1px solid #5b525b;
   background-color: #fff;
   font-size: 16px;
+  cursor: pointer;
 }
 #events-section .container .events-container .event-card .eventContetBox .eventCardFooter span {
   color: #0f0e12;
@@ -703,6 +667,7 @@ header .dots-wrapper .dots .dot.active {
   gap: 20px;
   grid-template-columns: repeat(4, 1fr);
   justify-content: space-between;
+  row-gap: 50px;
 }
 #courses-section .container .courses-container .course-card .courseImgBox img {
   border-radius: 14px;
@@ -721,6 +686,7 @@ header .dots-wrapper .dots .dot.active {
   margin-bottom: 18px;
   font-size: 18px;
   font-family: "Playfair Display", serif;
+  min-height: 50px;
 }
 #courses-section .container .courses-container .course-card .courseContetBox .courseCardFooter button {
   padding: 10px 20px;
@@ -729,8 +695,17 @@ header .dots-wrapper .dots .dot.active {
   border: 1px solid #5b525b;
   background-color: #fff;
   font-size: 16px;
+  cursor: pointer;
 }
 
+@media screen and (max-width: 1230px) {
+  #events-section .container .events-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #courses-section .container .courses-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 @media screen and (max-width: 1024px) {
   #events-section .container .events-container {
     grid-template-columns: repeat(2, 1fr);
@@ -785,7 +760,8 @@ header .dots-wrapper .dots .dot.active {
   margin: 60px 0;
 }
 .eventDetail-section .container .eventDetail .eventDetailImgBox {
-  height: 500px;
+  height: 550px;
+  overflow: hidden;
 }
 .eventDetail-section .container .eventDetail .eventDetailImgBox img {
   border-radius: 16px;
@@ -830,6 +806,77 @@ header .dots-wrapper .dots .dot.active {
   border: 1px solid #5b525b;
   background-color: #fff;
   font-size: 16px;
+}
+
+.courseDetail-section {
+  margin: 40px 0;
+}
+.courseDetail-section .container .courseDetail .courseDetailImgBox {
+  height: 500px;
+  overflow: hidden;
+}
+.courseDetail-section .container .courseDetail .courseDetailImgBox img {
+  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  margin-top: 46px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailName {
+  font-family: "Playfair Display", serif;
+  font-size: 48px;
+  margin: 46px 0;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailCoontent {
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailCoontent iframe {
+  width: 100%;
+  margin-top: 20px;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailBtnBox {
+  display: flex;
+  margin-bottom: 66px;
+  justify-content: center;
+}
+.courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailBtnBox button {
+  padding: 10px 20px;
+  color: #5b525b;
+  border-radius: 8px;
+  border: 1px solid #5b525b;
+  background-color: #fff;
+  font-size: 16px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.courseDetail-section .container .courseDetail .courseTeacher {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+}
+.courseDetail-section .container .courseDetail .courseTeacher .courseTeacherImg img {
+  border-radius: 16px;
+}
+.courseDetail-section .container .courseDetail .courseTeacher .courseTeacherAbout {
+  font-weight: 400;
+  font-style: Regular;
+}
+.courseDetail-section .container .courseDetail .courseTeacher .courseTeacherAbout .teacherAboutName {
+  font-family: "Playfair Display", serif;
+  font-size: 48px;
+}
+.courseDetail-section .container .courseDetail .courseTeacher .courseTeacherAbout .teacherAboutContent {
+  font-family: "Poppins", sans-serif;
+  font-size: 24px;
 }
 
 footer {

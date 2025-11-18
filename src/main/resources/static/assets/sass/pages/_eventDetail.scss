@@ -3,13 +3,16 @@
   .container {
     .eventDetail {
       .eventDetailImgBox {
-        height: 500px;
+        height: 550px;
+        overflow: hidden;
+        
         img {
           border-radius: 16px;
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center;
+   
         }
       }
       .eventDetailContetBox {
