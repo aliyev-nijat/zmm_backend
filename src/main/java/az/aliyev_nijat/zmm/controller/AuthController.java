@@ -1,6 +1,5 @@
 package az.aliyev_nijat.zmm.controller;
 
-import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.dto.LoginDto;
 import az.aliyev_nijat.zmm.model.entity.UserEntity;
 import az.aliyev_nijat.zmm.service.CustomUserDetailsService;

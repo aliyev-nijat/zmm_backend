@@ -10,7 +10,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.util.Date;
 
@@ -57,11 +56,11 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             log.warn("JWT token expired: {}", e.getMessage());
         } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
+            log.warn("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error("Malformed JWT token: {}", e.getMessage());
+            log.warn("Malformed JWT token: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT token: {}", e.getMessage());
+            log.warn("Unsupported JWT token: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error("Empty or null JWT token: {}", e.getMessage());
         } catch (Exception e) {
@@ -70,5 +69,4 @@ public class JwtUtil {
 
         return false;
     }
-
 }

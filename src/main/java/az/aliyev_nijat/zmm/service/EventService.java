@@ -28,7 +28,6 @@ public class EventService {
 
     @Autowired
     private final EventMapper mapper;
-
     private final EventRepository repository;
     private final ImageRepository imageRepository;
 
@@ -48,7 +47,12 @@ public class EventService {
         return repository.findAll()
                 .stream()
                 .map(mapper::map)
-                .sorted(Comparator.comparing(EventDto::getOrder, Comparator.nullsLast(Long::compareTo)))
+                .sorted(
+                        Comparator.comparing(
+                                EventDto::getOrder,
+                                Comparator.nullsLast(Long::compareTo)
+                        )
+                )
                 .toList();
     }
 
@@ -58,7 +62,6 @@ public class EventService {
                 .orElseThrow(() ->
                         new EventNotFoundException("Event not found with given id")
                 );
-
 
         return mapper.map(event);
     }

@@ -1,27 +1,31 @@
 package az.aliyev_nijat.zmm.service;
 
 import az.aliyev_nijat.zmm.mapper.CourseMapper;
+import az.aliyev_nijat.zmm.model.dto.CourseApplyDto;
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.entity.CourseEntity;
 import az.aliyev_nijat.zmm.model.entity.ImageEntity;
 import az.aliyev_nijat.zmm.repository.CourseRepository;
 import az.aliyev_nijat.zmm.repository.ImageRepository;
+import az.aliyev_nijat.zmm.util.TelegramAdapter;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,6 @@ public class CourseService {
     private final ImageRepository imageRepository;
     private final CourseMapper mapper;
     private final Object LOCK = new Object();
-
 
     public CourseDto getById(Long id) {
         return repository
@@ -82,7 +85,6 @@ public class CourseService {
             MultipartFile image
     ) {
         synchronized (LOCK) {
-
             if (image == null || image.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
@@ -207,7 +209,6 @@ public class CourseService {
     }
 
     public List<CourseDto> getAll() {
-        Random random = new Random();
         List<CourseDto> result = new LinkedList<>();
         repository
                 .findAll()
@@ -217,5 +218,40 @@ public class CourseService {
         Collections.shuffle(result);
 
         return result;
+    }
+
+    public ResponseEntity<Void> apply(
+            @PathVariable Long courseId,
+            @RequestBody CourseApplyDto body
+    ) {
+        TelegramAdapter tg = new TelegramAdapter(
+                Dotenv.load().get("TG_BOT_TOKEN"),
+                Dotenv.load().get("TG_BOT_CHATID")
+        );
+        String courseName = repository
+                .findById(courseId)
+                .map(CourseEntity::getTitle)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Course not found by given id"
+                        )
+                );
+        String message = String.format("""
+                        %s kursuna yeni qeydiyyat:
+                        Ad: %s,
+                        Soyad: %s,
+                        Təvəllüd: %d,
+                        Əlaqə nömrəsi: %s,
+                        Cins: %s""",
+                courseName,
+                body.getFirstName() == null ? "" : body.getFirstName(),
+                body.getLastName() == null ? "" : body.getLastName(),
+                body.getBirthYear() == null ? "" : body.getBirthYear().intValue(),
+                body.getContactNumber() == null ? "" : body.getContactNumber(),
+                body.getGender() == null ? "" : body.getGender()
+        );
+        tg.sendMessage(message);
+        return ResponseEntity.noContent().build();
     }
 }

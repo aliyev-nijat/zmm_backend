@@ -1,17 +1,14 @@
 package az.aliyev_nijat.zmm.service;
 
 import az.aliyev_nijat.zmm.model.CustomUserDetails;
-import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.dto.LoginDto;
 import az.aliyev_nijat.zmm.model.entity.UserEntity;
 import az.aliyev_nijat.zmm.repository.UserRepository;
 import az.aliyev_nijat.zmm.util.JwtUtil;
-import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

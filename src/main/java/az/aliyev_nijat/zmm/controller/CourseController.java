@@ -1,8 +1,12 @@
 package az.aliyev_nijat.zmm.controller;
 
+import az.aliyev_nijat.zmm.model.dto.CourseApplyDto;
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
+import az.aliyev_nijat.zmm.util.TelegramAdapter;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import az.aliyev_nijat.zmm.service.CourseService;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
@@ -106,4 +110,14 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/apply/{courseId}")
+    public ResponseEntity<Void> apply(
+            @PathVariable Long courseId,
+            @RequestBody CourseApplyDto body
+            )
+    {
+        service.apply(courseId,body);
+        log.info(courseId + body.toString());
+        return ResponseEntity.noContent().build();
+    }
 }
