@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.IOException;
 
 @Component
 public class AppConfigurationRepository {
+
     private static final Object FILE_LOCK = new Object();
     private final String dbFilePath;
 

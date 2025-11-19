@@ -80,7 +80,7 @@
                 .map(set => {
                     let td = document.createElement("td");
                     const course = set.course;
-                    td.innerHTML = `<i>${course.teacherFirstName} ${course.teacherFirstName}</i>
+                    td.innerHTML = `<i>${course.teacherFirstName} ${course.teacherLastName}</i>
                 <br> ${course.teacherAbout}`;
                     set.tr.appendChild(td);
                     return set;
