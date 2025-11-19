@@ -52,10 +52,16 @@
       .courseTeacher {
         display: grid;
         grid-template-columns: auto auto;
-        gap: 10px;
+        gap: 25px;
         .courseTeacherImg {
+          max-width: 380px;
+          // min-height: 300px;
           img {
             border-radius: 16px;
+            width: 100%;
+    
+            object-fit: cover;
+            object-position: top;
           }
         }
         .courseTeacherAbout {
@@ -69,7 +75,7 @@
           .teacherAboutContent {
             font-family: "Poppins", sans-serif;
 
-            font-size: 24px;
+            font-size: 22px;
           }
         }
       }

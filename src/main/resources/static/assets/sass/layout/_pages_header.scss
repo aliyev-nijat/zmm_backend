@@ -19,3 +19,17 @@
     }
   }
 }
+@media screen and (max-width: 772px) {
+  #pages-header {
+    .container {
+      .header-container {
+        .header-headText {
+          font-size: 22px;
+        }
+        .header-contentTex {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
