@@ -25,7 +25,7 @@ function renderCourseDetail(data) {
   imgBox.innerHTML = ""; // təmizlə
 
   const img = createEl("img", "courseDetailImg", imgBox);
-  img.src = data.imageUrl;
+  img.src = `${host}${data.imageUrl}`;
   img.alt = data.title;
 
   // ==========================
@@ -51,10 +51,10 @@ function renderCourseDetail(data) {
 
   const teacherImgBox = createEl("div", "courseTeacherImg", teacherBox);
   const tImg = createEl("img", "teacherImg", teacherImgBox);
-  tImg.src = data.teacherImageUrl;
+  tImg.src = `${host}${data.teacherImageUrl}` ;
   tImg.alt = data.teacher;
 
   const teacherAbout = createEl("div", "courseTeacherAbout", teacherBox);
-  createEl("p", "teacherAboutName", teacherAbout, data.teacherFirstName + data.teacherLastName);
+  createEl("p", "teacherAboutName", teacherAbout, `${data.teacherFirstName} ${data.teacherLastName}`  );
   createEl("p", "teacherAboutContent", teacherAbout, data.teacherAbout);
 }
