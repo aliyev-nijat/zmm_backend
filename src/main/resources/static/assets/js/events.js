@@ -1,4 +1,4 @@
-export const host = "http://165.232.122.28:8080";
+export const host = "";
 
 const slideRow = document.querySelector(".slide-row");
 const eventsContainer = document.querySelector(".events-container");

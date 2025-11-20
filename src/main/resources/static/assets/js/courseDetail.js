@@ -1,4 +1,4 @@
-    import { host } from "./events.js"
+import { host } from "./events.js";
 
 const courseId = new URLSearchParams(window.location.search).get("id");
 
@@ -12,12 +12,11 @@ function createEl(tag, className, parent, text) {
 }
 
 fetch(`${host}/api/courses/${courseId}`)
-  .then(res => res.json())
-  .then(data => renderCourseDetail(data))
-  .catch(err => console.log("Error:", err));
+  .then((res) => res.json())
+  .then((data) => renderCourseDetail(data))
+  .catch((err) => console.log("Error:", err));
 
 function renderCourseDetail(data) {
-
   // ==========================
   //  1) ŞƏKİL
   // ==========================
@@ -40,7 +39,8 @@ function renderCourseDetail(data) {
   const btnBox = createEl("div", "courseDetailBtnBox", contetBox);
   const btn = createEl("button", "", btnBox, "Müraciət et");
   btn.addEventListener("click", () => {
-    window.location.href = `https://wa.me/994501234567?text=Kurs: ${data.title}`;
+    
+    window.location.href = `./apply.html?id=${courseId}`;
   });
 
   // ==========================
@@ -51,10 +51,15 @@ function renderCourseDetail(data) {
 
   const teacherImgBox = createEl("div", "courseTeacherImg", teacherBox);
   const tImg = createEl("img", "teacherImg", teacherImgBox);
-  tImg.src = `${host}${data.teacherImageUrl}` ;
+  tImg.src = `${host}${data.teacherImageUrl}`;
   tImg.alt = data.teacher;
 
   const teacherAbout = createEl("div", "courseTeacherAbout", teacherBox);
-  createEl("p", "teacherAboutName", teacherAbout, `${data.teacherFirstName} ${data.teacherLastName}`  );
+  createEl(
+    "p",
+    "teacherAboutName",
+    teacherAbout,
+    `${data.teacherFirstName} ${data.teacherLastName}`
+  );
   createEl("p", "teacherAboutContent", teacherAbout, data.teacherAbout);
 }

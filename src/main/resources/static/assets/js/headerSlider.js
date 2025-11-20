@@ -1,4 +1,4 @@
-export const host = "http://165.232.122.28:8080";
+export const host = "";
 
 fetch(`${host}/api/slider`)
   .then((r) => r.json())

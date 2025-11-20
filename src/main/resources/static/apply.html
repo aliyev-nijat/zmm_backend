@@ -43,33 +43,74 @@
          <div class="navClose"><img src="./assets/images/icon/Close.svg" alt=""></div>
          <ul>
             <li><a href="./index.html">Ana Səhifə</a></li>
-                  <li><a href="./events.html">Tədbirlər</a></li>
-                  <li><a href="./courses.html">Kurslar</a></li>
-                  <li><a href="./about.html">Haqqımızda</a></li>
-                  <li><a href="./contact.html">Əlaqə</a></li>
+            <li><a href="./events.html">Tədbirlər</a></li>
+            <li><a href="./courses.html">Kurslar</a></li>
+            <li><a href="./about.html">Haqqımızda</a></li>
+            <li><a href="./contact.html">Əlaqə</a></li>
             <p>© 2025</p>
          </ul>
 
       </div>
    </nav>
 
+   <main>
+      <section class="apply_section">
+         <div class="container">
+            <p class="apply_header">Müraciət et</p>
 
-   <footer>
-      <div class="container">
-         <div class="footer-container">
-            <ul>
-               <li><a href="./index.html">Ana Səhifə</a></li>
-                  <li><a href="./events.html">Tədbirlər</a></li>
-                  <li><a href="./courses.html">Kurslar</a></li>
-                  <li><a href="./about.html">Haqqımızda</a></li>
-                  <li><a href="./contact.html">Əlaqə</a></li>
-            </ul>
-            <p>© 2025 Zirə Mədəniyyət Mərkəzi</p>
+            <form>
+               <div class="form-group">
+
+                  <input type="text" id="ad" name="ad" placeholder="Ad" required >
+               </div>
+
+               <div class="form-group">
+
+                  <input type="text" id="soyad" name="soyad" placeholder="Soyad" required>
+               </div>
+
+               <div class="form-group">
+
+                  <select id="dogum_ili" name="dogum_ili" class="birth-select" required>
+                     <option value="" disabled selected>Doğum ili</option>
+                     <!-- 1950-dən cari ilə qədər -->
+                     <script>
+                        const year = new Date().getFullYear();
+                        for (let i = year; i >= 1950; i--) {
+                           document.write(`<option value="${i}">${i}</option>`);
+                        }
+                     </script>
+                  </select>
+               </div>
+               <div class="form-group">
+
+                  <input type="text" id="telefon" placeholder="Nömrə" required>
+               </div>
+               <div class="form-group">
+                  <label class="gender_text">Cinsiyyət</label>
+                  <div class="gender-group">
+                     <label class="gender-option">
+                        <input type="radio" name="cinsiyyet" value="kisi" required>
+                        Kişi
+                     </label>
+                     <label class="gender-option">
+                        <input type="radio" name="cinsiyyet" value="qadin">
+                        Qadın
+                     </label>
+                  </div>
+               </div>
+
+               <button type="submit" class="submit-btn">Müraciət et</button>
+            </form>
          </div>
-      </div>
-   </footer>
+      </section>
+
+
+   </main>
+
 
    <script src="./assets/js/nav.js"></script>
+   <script src="./assets/js/apply.js"></script>
 </body>
 
 </html>
