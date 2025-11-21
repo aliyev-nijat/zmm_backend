@@ -1,6 +1,4 @@
-
-import { host } from "./events.js"
-
+import { host } from "./events.js";
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
@@ -56,6 +54,16 @@ function fillDetail(ev) {
   btn.innerHTML = "Bilet əldə edin";
 
   btn.addEventListener("click", () => {
-    console.log("Ətraflı məlumat klik edildi!");
+    fetch(`${host}/api/settings`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.whatsappUrl) {
+          console.error("whatsappUrl tapılmadı!");
+          return;
+        }
+
+        window.location.href = data.whatsappUrl;
+      })
+      .catch((err) => console.log("Xəta:", err));
   });
 }

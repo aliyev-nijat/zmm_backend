@@ -387,10 +387,10 @@ header .dots-wrapper .dots .dot.active {
   grid-template-columns: 1.5fr 1.2fr;
   justify-content: space-between;
   align-items: center;
-  gap: 82px;
+  gap: 40px;
 }
 #about-section .container .about-container .abut-text .avout-header-textBox {
-  margin-bottom: 48px;
+  margin-bottom: 36px;
 }
 #about-section .container .about-container .abut-text .avout-header-textBox p {
   font-family: "Playfair Display", serif;
@@ -492,6 +492,10 @@ header .dots-wrapper .dots .dot.active {
   display: flex;
   gap: 20px;
 }
+#contact-section .contact-ContentBox .contact-info .contact-infoSocial a {
+  width: 50px;
+  height: 50px;
+}
 
 @media screen and (max-width: 640px) {
   .pageSection .container .section_Container .section_Header .section_head {
@@ -537,7 +541,7 @@ header .dots-wrapper .dots .dot.active {
     gap: 42px;
   }
   #about-section .container .about-container .abut-text .avout-header-textBox {
-    margin-bottom: 36px;
+    margin-bottom: 26px;
   }
   #about-section .container .about-container .abut-text .avout-header-textBox p {
     font-size: 36px;
@@ -1050,7 +1054,7 @@ input:-webkit-autofill:active {
   align-items: start;
 }
 .courseDetail-section .container .courseDetail .courseTeacher .courseTeacherImg {
-  float: left !important;
+  float: left;
   width: 340px;
   height: auto;
   margin-right: 25px;
@@ -1080,6 +1084,10 @@ input:-webkit-autofill:active {
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   line-height: 1.6;
+}
+.courseDetail-section .container .courseDetail .courseTeacher .courseTeacherAbout .teacherAboutContent a {
+  color: rgb(54, 54, 228);
+  text-decoration: underline;
 }
 .courseDetail-section .container .courseDetail .courseTeacher::after {
   content: "";
@@ -1135,6 +1143,18 @@ input:-webkit-autofill:active {
     position: relative;
     transform: translate(-50%, -50%);
     left: 50%;
+  }
+  .courseDetail-section .container .courseDetail .courseDetailImgBox {
+    height: 350px;
+  }
+  .courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailName {
+    font-size: 32px;
+  }
+  .courseDetail-section .container .courseDetail .courseDetailContetBox .courseDetailCoontent {
+    font-size: 16px;
+  }
+  .courseDetail-section .container .courseDetail .courseTeacher .courseTeacherImg {
+    float: none !important;
   }
 }
 footer {

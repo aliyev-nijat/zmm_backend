@@ -27,8 +27,6 @@ function getDataAbout(data) {
     // Əgər içində artıq məlumat varsa təmizləmək istəyirsənsə (tövsiyə olunur)
     container.innerHTML = "";
 
-
-
     const phoneP = createEl("p", "", container);
     phoneP.innerHTML = `Telefon: ${data.contactPhone}`;
 
@@ -39,17 +37,25 @@ function getDataAbout(data) {
     hoursP.innerHTML = `İş saatları: ${data.workHours}`;
   });
 
-  contact_infoSocial.forEach((container) => {
-    container.innerHTML = "";
-    const instaUrl = createEl("a", "", container);
-    instaUrl.href = data.instagramUrl;
-    const whassapUrl = createEl("a", "", container);
+ contact_infoSocial.forEach((container) => {
+  container.innerHTML = "";
 
-    whassapUrl.href = data.whatsappUrl;
+  const socials = [
+    { url: data.instagramUrl, icon: "./assets/images/social/insta.svg" },
+    { url: data.whatsappUrl, icon: "./assets/images/social/whatsapp.svg" },
+    { url: data.whatsappChannelUrl, icon: "./assets/images/social/bullhorn.svg" },
+    { url: data.tiktokUrl, icon: "./assets/images/social/tiktok.svg" },
+    { url: data.youtubeUrl, icon: "./assets/images/social/youtube.svg" }
+  ];
 
-    const instaIcon = createEl("img", "", instaUrl);
-    instaIcon.src = "./assets/images/social/insta.svg";
-    const whassapIcon = createEl("img", "", whassapUrl);
-    whassapIcon.src = "./assets/images/social/whatsapp.svg";
+  socials.forEach((item) => {
+    if (!item.url) return; // boş olanları keç
+    const a = createEl("a", "", container);
+    a.href = item.url;
+
+    const img = createEl("img", "", a);
+    img.src = item.icon;
   });
+});
+
 }
