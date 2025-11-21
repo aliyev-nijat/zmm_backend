@@ -27,8 +27,7 @@ function getDataAbout(data) {
     // Əgər içində artıq məlumat varsa təmizləmək istəyirsənsə (tövsiyə olunur)
     container.innerHTML = "";
 
-    const emailP = createEl("p", "", container);
-    emailP.innerHTML = `E-mail: ${data.email}`;
+
 
     const phoneP = createEl("p", "", container);
     phoneP.innerHTML = `Telefon: ${data.contactPhone}`;

@@ -16,11 +16,11 @@ function aboutSplit(text = "") {
 fetch(`${host}/api/courses`) // ← bura dəyişdi
   .then((r) => r.json())
   .then((data) => {
-    const sorted = data.sort((a, b) => a.id - b.id);
-    const firstEight = sorted.slice(0, 8);
+    
+    const firstEight = data.slice(0, 8);
 
     renderCourseSlides(firstEight); // funksiya adı da dəyişdi
-    renderCourses(sorted); // istəyə bağlı: bütün kartlar
+    renderCourses(data); // istəyə bağlı: bütün kartlar
   });
 
 /* 3) Sliders (üst sıxışdıran hissə) */

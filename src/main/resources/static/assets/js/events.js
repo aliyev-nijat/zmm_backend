@@ -1,16 +1,13 @@
-export const host = "http://165.232.122.28:8080";
+export const host = "";
 
 const slideRow = document.querySelector(".slide-row");
 const eventsContainer = document.querySelector(".events-container");
 fetch(`${host}/api/events`)
   .then((r) => r.json())
   .then((data) => {
-    const sorted = data.sort((a, b) => a.id - b.id);
-
-    const firstEight = sorted.slice(0, 8);
-
+    const firstEight = data.slice(0, 8);
     renderSlides(firstEight);
-    renderEvents(sorted);
+    renderEvents(data);
   });
 
 function createEl(tag, className, parent) {
@@ -21,17 +18,17 @@ function createEl(tag, className, parent) {
 }
 function charsPerLine() {
   const w = window.innerWidth;
-  if (w <  480) return 37;   /* mobil */
-  if (w <  768) return 50;   /* planşet */
-  return 70;                 /* desktop */
+  if (w < 480) return 37; /* mobil */
+  if (w < 768) return 50; /* planşet */
+  return 70; /* desktop */
 }
 
-function aboutSplit(text = '', maxLines = 3) {
-  if (!text) return '';
+function aboutSplit(text = "", maxLines = 3) {
+  if (!text) return "";
   const maxChars = charsPerLine() * maxLines;
   if (text.length <= maxChars) return text;
-  const cut = text.slice(0, maxChars).replace(/\s+\S*$/, ''); // son kəlməni tam kəsmə
-  return cut + '…';
+  const cut = text.slice(0, maxChars).replace(/\s+\S*$/, ""); // son kəlməni tam kəsmə
+  return cut + "…";
 }
 function renderSlides(data) {
   data.forEach((ev) => {
@@ -69,11 +66,15 @@ function renderSlides(data) {
   requestUpdateThumb();
 }
 let resizeTimeout;
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
-    document.querySelectorAll('.course_sliderContent, .courseCardContent')
-            .forEach(el => el.textContent = aboutSplit(el.dataset.fullText || el.textContent));
+    document
+      .querySelectorAll(".course_sliderContent, .courseCardContent")
+      .forEach(
+        (el) =>
+          (el.textContent = aboutSplit(el.dataset.fullText || el.textContent))
+      );
   }, 150);
 });
 function renderEvents(list) {
