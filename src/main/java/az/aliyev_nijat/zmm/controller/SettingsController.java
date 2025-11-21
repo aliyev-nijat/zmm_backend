@@ -15,7 +15,7 @@ public class SettingsController {
     public Map<String, Object> getSettings() {
         Map<String, Object> result = new HashMap<>();
         result.put("contactPhone", "012 456 92 23");
-        result.put("whatsapp","070 801 21 64");
+        result.put("whatsapp", "070 801 21 64");
         result.put("whatsappUrl", "https://wa.me/+994708012164");
         result.put("whatsappChannelName", "ZQMM “ Elanlar\uD83D\uDCE2 “");
         result.put("whatsappChannelUrl", "https://whatsapp.com/channel/0029VbAuvua9Bb61Btr2Cc3Q");
@@ -28,15 +28,28 @@ public class SettingsController {
         result.put("youtubeUrl", "https://www.youtube.com/@ZQMMK");
         result.put("youtubeUsername", "ZQMMK");
         result.put("about", """
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius facere iusto, sequi dolorem voluptatem magnam
-                        cupiditate ea perspiciatis quas temporibus quisquam eos placeat culpa eveniet neque veritatis! Veniam, sed nemo
-                        ea recusandae nostrum, voluptatum aperiam tempora ipsam ex totam distinctio? Corporis, ducimus consequuntur amet
-                        laborum aspernatur cum nesciunt ipsa. Sint adipisci itaque repellendus doloribus fugit at facilis dolore vel
-                        unde a veniam odit, iusto voluptas ipsum nihil corporis. Omnis sequi assumenda eum consectetur qui, sapiente in
-                        dolorum laboriosam voluptatibus aspernatur. Voluptatem placeat voluptatibus ea? Debitis vitae magni, dolor,
-                        accusamus officia ipsum nostrum sed ipsa at quidem hic! Natus et sint velit facere molestias. Rerum, aut! Vitae
-                        aut quod consequatur perferendis quasi magnam dignissimos, excepturi quisquam necessitatibus a et, unde commodi
-                        minima laboriosam velit expedita. Nam, voluptatem unde. Alias incidunt, perspiciatis itaque officiis aspernatur.""");
+                Zirə Qəsəbə Mədəniyyət Mərkəzi 8 dekabr 2008-ci il tarixində fəaliyyətə başlamışdır.
+                Mərkəz yaradıldığı gündən etibarən qəsəbənin mədəni həyatını canlandırmaq,
+                sakinlərin asudə vaxtını səmərəli təşkil etmək və müxtəlif sahələr üzrə bilik
+                və bacarıqların inkişafına şərait yaratmaq məqsədi ilə fəaliyyət göstərir.
+                2008–2022-ci illərdə Mədəniyyət Mərkəzinə Xumarə Əliyeva  rəhbərlik etmiş, bu dövrdə mərkəzin inkişafı, tədris kurslarının genişləndirilməsi və icma ilə mədəni əlaqələrin gücləndirilməsi istiqamətində mühüm addımlar atılmışdır.
+                2023-cü ildən etibarən Mərkəzə Röyal Cəbiyev  təyin olunmuş, rəhbərlikdəki yenilənmə ilə mədəni, sosial və yaradıcı fəaliyyətlər daha da genişləndirilmişdir. Bu mərhələdə Mədəniyyət Mərkəzi həm ənənəvi kursları, həm də müasir dövrün tələblərinə uyğun yeni tədris istiqamətlərini işə salaraq fəaliyyətini daha da diversifikasiya etmişdir.
+                Mərkəz fəaliyyət göstərdiyi dövrdə müxtəlif sahələr üzrə kurslar təşkil edib, yüzlərlə uşağın və gəncin inkişafına töhfə vermişdir. Bu kurslara aşağıdakılar daxildir:
+                Rəqs
+                Komputer\s
+                İngilis dili
+                Şahmat
+                Proqramlaşdırma / proqramist hazırlığı
+                Gitara
+                Fortepiano
+                Vizaj\s
+                Dərzilik
+                Empathy Teatr\s
+                Bu kurslar vasitəsilə uşaqlar, yeniyetmələr və gənclər həm yaradıcı, həm də 
+                praktiki sahələrdə öz bacarıqlarını inkişaf etdirmək imkanı əldə etmişlər.
+                Bu gün Zirə Qəsəbə Mədəniyyət Mərkəzi öz fəaliyyətini davam etdirərək qəsəbənin 
+                sosial-mədəni həyatının əsas mərkəzlərindən biri kimi çıxış edir. Mərkəz həm ənənəvi incəsənət 
+                sahələrini qoruyub inkişaf etdirir, həm də müasir bilik və bacarıqların tədrisinə geniş yer verir.""");
         result.put("imageUrl", "/assets/images/about/about.svg");
         return result;
 
