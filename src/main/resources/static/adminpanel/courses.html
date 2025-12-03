@@ -108,9 +108,9 @@
                 .map(set => {
                     let td = document.createElement("td");
                     set.tr.appendChild(td);
-                    let button = document.createElement("button");
-                    button.innerText = "Sil";
-                    button.addEventListener("click", e => {
+                    let buttonDelete = document.createElement("button");
+                    buttonDelete.innerText = "Sil";
+                    buttonDelete.addEventListener("click", e => {
                         e.preventDefault();
                         fetch(`/api/courses/${set.course.id}`, {
                             method: "DELETE",
@@ -119,7 +119,16 @@
                             }
                         })
                     })
-                    td.appendChild(button);
+                    td.appendChild(buttonDelete);
+                    let buttonEdit = document.createElement("button");
+                    buttonEdit.innerText = "Redaktə";
+                    buttonEdit.addEventListener("click", e => {
+                        e.preventDefault();
+                        localStorage.setItem("currentCourseId", set.course.id);
+                        window.location.href = "/adminpanel/coursesUpdate.html";
+                    })
+                    td.appendChild(buttonEdit);
+                    
                     return set;
                 })
                 .map(set => set.tr)
@@ -156,7 +165,6 @@
             const fileInput = document.querySelector("#course-image");
 
             if (fileInput.files.length != 0) {
-                console.log(fileInput);
                 const image = fileInput.files[0];
                 const imageFormData = new FormData();
                 imageFormData.append('image', image);
@@ -166,8 +174,7 @@
                         "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
                     },
                     body: imageFormData
-                })
-                    .then(r => console.log(r.json));
+                });
             }
         }
 

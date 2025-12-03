@@ -64,6 +64,7 @@ public class CourseService {
     }
 
     public CourseDto update(Long id, CourseDto course) {
+        course.setId(id);
         CourseEntity oldCourse = repository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(
@@ -71,7 +72,6 @@ public class CourseService {
                         )
                 );
         CourseEntity newCourse = mapper.map(course);
-        newCourse.setId(oldCourse.getId());
         newCourse.setImageUrl(oldCourse.getImageUrl());
         newCourse.setTeacherImageUrl(
                 oldCourse.getTeacherImageUrl()
