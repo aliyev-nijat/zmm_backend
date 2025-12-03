@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redaktə et</title>
+    <link rel="stylesheet" href="./events.css">
+</head>
+
+<body>
+    <form id="update-form">
+        <label for="title">Başlıq</label>
+        <input required type="text" name="title" id="title">
+        <label for="about">Haqqında</label>
+        <textarea required name="about" id="about"></textarea>
+        <label for="teacherFirstName">Müəllimin adı</label>
+        <input required type="text" name="teacherFirstName" id="teacherFirstName">
+        <label for="teacherLastName">Müəllimin soyadı</label>
+        <input required type="text" name="teacherLastName" id="teacherLastName">
+        <label for="teacherAbout">Müəllim haqqında</label>
+        <textarea required name="teacherAbout" id="teacherAbout"></textarea>
+        <button>Redaktə et</button>
+    </form>
+    <script>
+        let form = document.querySelector("#update-form");
+        let titleInput = form.querySelector("#title");
+        let aboutInput = form.querySelector("#about");
+        let teacherFirstNameInput = form.querySelector("#teacherFirstName")
+        let teacherLastNameInput = form.querySelector("#teacherLastName");
+        let teacherAboutInput = form.querySelector("#teacherAbout");
+
+
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            let data = {
+                title: titleInput.value,
+                about: aboutInput.value,
+                teacherFirstName: teacherFirstNameInput.value, 
+                teacherLastName: teacherLastNameInput.value,
+                teacherAbout: teacherAboutInput.value 
+            }
+            updateCourse(data);
+            window.location.href = "/adminpanel/courses.html";
+        })
+
+        function updateCourse(course) {
+            return fetch(`/api/courses/${getCourseId()}`, {
+                method: 'PUT',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(course)
+            })
+        }
+
+        function getUser() {
+            return fetch("/api/auth/user", {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                }
+            })
+        }
+
+        function getCourse(id) {
+            if (typeof id !== "number" || isNaN(id)) {
+                alert("Kurs ID tapılmadı");
+                throw Error();
+            }
+            return fetch(`/api/courses/${id}`)
+                .then(r => {
+                    if (r.status != 200) {
+                        throw Error();
+                    }
+
+                    return r.json();
+                });
+        }
+
+        function injectData(data) {
+
+            titleInput.value = data.title;
+            aboutInput.value = data.about;
+            teacherFirstNameInput.value = data.teacherFirstName;
+            teacherLastNameInput.value = data.teacherLastName;
+            teacherAboutInput.value = data.teacherAbout;
+        }
+
+        function getCourseId() {
+            return Number(localStorage.getItem("currentCourseId"));
+        }
+
+        function loadPage() {
+            getUser()
+                .then(r => {
+                    if (r.status != 200) {
+                        throw Error();
+                    }
+
+                    return r.json();
+                })
+                .then(data => {
+                    if (data.role != 'ADMIN') throw Error();
+                })
+                .catch(() => window.location.href = "/adminpanel/login.html");
+            getCourse(getCourseId())
+                .then(course => injectData(course))
+                .catch(() => alert("Xəta: Kurs yüklənmədi!"));
+        }
+
+        loadPage();
+    </script>
+</body>
+
+</html>
