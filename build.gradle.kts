@@ -29,7 +29,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     //implementation("org.postgresql:postgresql:42.7.8") //prod
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    //implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     implementation("io.github.cdimascio:dotenv-java:3.0.2")
