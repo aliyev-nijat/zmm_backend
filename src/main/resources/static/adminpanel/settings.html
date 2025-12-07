@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt</title>
+    <link rel="stylesheet" href="./events.css">
+</head>
+
+<body>
+    <form id="main-form">
+        <label>Əlaqə nömrəsi</label>
+        <input type="text" name="contactPhone" placeholder="contactPhone">
+        <label>Whatsapp nömrəsi</label>
+        <input type="text" name="whatsapp" placeholder="whatsapp">
+        <label>Whatsapp linki</label>
+        <input type="text" name="whatsappUrl" placeholder="whatsappUrl">
+        <label>Whatsapp kanalı adı</label>
+        <input type="text" name="whatsappChannelName" placeholder="whatsappChannelName">
+        <label>Whatsapp kanal linki</label>
+        <input type="text" name="whatsappChannelUrl" placeholder="whatsappChannelUrl">
+        <label>Tiktok linki</label>
+        <input type="text" name="tiktokUrl" placeholder="tiktokUrl">
+        <label>Tiktok hesab adı</label>
+        <input type="text" name="tiktokUsername" placeholder="tiktokUsername">
+        <label>İş günləri</label>
+        <input type="text" name="workDays" placeholder="workDays">
+        <label>İş saatları</label>
+        <input type="text" name="workHours" placeholder="workHours">
+        <label>Instagram linki</label>
+        <input type="text" name="instagramUrl" placeholder="instagramUrl">
+        <label>Instagram hesab adı</label>
+        <input type="text" name="instagramUsername" placeholder="instagramUsername">
+        <label>YouTube linki</label>
+        <input type="text" name="youtubeUrl" placeholder="youtubeUrl">
+        <label>YouTube kanal adı</label>
+        <input type="text" name="youtubeUsername" placeholder="youtubeUsername">
+        <label>Mərkəz haqqında</label>
+        <textarea name="about" placeholder="about"></textarea>
+        <button type="submit">Redaktə et</button>
+    </form>
+    <script>
+        const form = document.getElementById("main-form");
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData); // FormData → JSON obyekti
+            fetch("/api/settings", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                },
+                body: JSON.stringify(data)
+            })
+                .then(r => {
+                    alert(r.status == 200 ? "Redaktə edildi" : "Xəta baş verdi")
+                });
+        })
+
+        getUser()
+            .then(r => {
+                if (r.status != 200) {
+                    throw Error();
+                }
+
+                return r.json();
+            })
+            .then(data => {
+                if (data.role != 'ADMIN') throw Error();
+            })
+            .catch(() => window.location.href = "/adminpanel/login.html");
+
+        function getUser() {
+            return fetch("/api/auth/user", {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("zmmtoken")
+                }
+            })
+        }
+
+        fetch('/api/settings')
+        .then(r => r.json())
+        .then(data => {
+            Array.from(form.children)
+            .filter(e => ['input','textarea'].includes(e.tagName.toLocaleLowerCase()))
+            .forEach(input => input.value = data[input.getAttribute('name')]);
+        })
+    </script>
+</body>
+
+</html>
