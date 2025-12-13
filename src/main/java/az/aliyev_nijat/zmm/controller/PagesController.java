@@ -42,16 +42,4 @@ public class PagesController {
     public String events() {
         return "events.html";
     }
-
-    @RequestMapping("/error")
-    public String handleError(HttpServletRequest request) {
-        Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
-        String requestUri = (String) request.getAttribute("jakarta.servlet.error.request_uri");
-
-        if (statusCode != null && statusCode == 404) {
-            return requestUri.startsWith("/adminpanel") ? "redirect:/adminpanel/index.html" : "redirect:/";
-        }
-
-        return "/error.html";
-    }
 }
