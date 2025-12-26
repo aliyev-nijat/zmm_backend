@@ -8,6 +8,6 @@ import lombok.Setter;
 public class ImageEntity {
 
     private Long id;
-    private String extension;
+    private ImageExtension extension;
     private byte[] content;
 }
