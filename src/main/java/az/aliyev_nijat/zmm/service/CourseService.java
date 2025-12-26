@@ -5,6 +5,7 @@ import az.aliyev_nijat.zmm.model.dto.CourseApplyDto;
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.entity.CourseEntity;
 import az.aliyev_nijat.zmm.model.entity.ImageEntity;
+import az.aliyev_nijat.zmm.model.entity.ImageExtension;
 import az.aliyev_nijat.zmm.repository.CourseRepository;
 import az.aliyev_nijat.zmm.repository.ImageRepository;
 import az.aliyev_nijat.zmm.util.TelegramAdapter;
@@ -98,7 +99,10 @@ public class CourseService {
                 imageRepository.delete(oldImageId);
             }
             String[] splited = image.getOriginalFilename().split("\\.");
-            String extension = splited[splited.length - 1];
+            ImageExtension extension = ImageExtension
+                    .valueOf(
+                            splited[splited.length - 1].toUpperCase()
+                    );
             byte[] content;
             try {
                 content = image.getBytes();
@@ -162,7 +166,10 @@ public class CourseService {
                 imageRepository.delete(oldTeacherImageId);
             }
             String[] splited = image.getOriginalFilename().split("\\.");
-            String extension = splited[splited.length - 1];
+            ImageExtension extension = ImageExtension
+                    .valueOf(
+                            splited[splited.length - 1].toUpperCase()
+                    );
             byte[] content;
             try {
                 content = image.getBytes();

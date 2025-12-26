@@ -5,6 +5,7 @@ import az.aliyev_nijat.zmm.mapper.EventMapper;
 import az.aliyev_nijat.zmm.model.dto.EventDto;
 import az.aliyev_nijat.zmm.model.entity.EventEntity;
 import az.aliyev_nijat.zmm.model.entity.ImageEntity;
+import az.aliyev_nijat.zmm.model.entity.ImageExtension;
 import az.aliyev_nijat.zmm.repository.ImageRepository;
 import az.aliyev_nijat.zmm.repository.EventRepository;
 import lombok.NonNull;
@@ -116,7 +117,10 @@ public class EventService {
             imageRepository.delete(oldImageId);
         }
         String[] splited = image.getOriginalFilename().split("\\.");
-        String extension = splited[splited.length - 1];
+        ImageExtension extension = ImageExtension
+                .valueOf(
+                        splited[splited.length - 1].toUpperCase()
+                );
         byte[] content;
         try {
             content = image.getBytes();

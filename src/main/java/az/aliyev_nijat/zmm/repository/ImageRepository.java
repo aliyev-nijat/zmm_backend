@@ -2,31 +2,24 @@ package az.aliyev_nijat.zmm.repository;
 
 import az.aliyev_nijat.zmm.model.entity.AppConfiguration;
 import az.aliyev_nijat.zmm.model.entity.ImageEntity;
+import az.aliyev_nijat.zmm.model.entity.ImageExtension;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
 public class ImageRepository {
 
     private static final Logger log = LoggerFactory.getLogger(ImageRepository.class);
-    private static final List<String> ALLOWED_EXTENSIONS = List.of(
-            "jpeg",
-            "jpg",
-            "png",
-            "gif",
-            "bmp",
-            "webp",
-            "tiff",
-            "tif",
-            "svg"
-    );
+
     private final String dbFolder;
     private final AppConfigurationRepository configurationRepository;
 
@@ -36,10 +29,9 @@ public class ImageRepository {
     }
 
     public ImageEntity create(ImageEntity image) {
-        if (image.getId() != null) {
-            throw new RuntimeException("ID must be null");
+        if (image.getId() != null || image.getExtension() == null) {
+            throw new RuntimeException("ID must be null;extension can not be null");
         }
-        validateExtension(image.getExtension());
         Long id = generateId();
         image.setId(id);
         Path path = Paths.get(String.format(
@@ -47,6 +39,8 @@ public class ImageRepository {
                 dbFolder,
                 image.getId(),
                 image.getExtension()
+                        .toString()
+                        .toLowerCase()
         ));
         try {
             Files.write(path, image.getContent());
@@ -70,7 +64,9 @@ public class ImageRepository {
                     )
                     .map(nameAndExtension -> new Object() {
                         Long id = Long.parseLong(nameAndExtension[0]);
-                        String extension = nameAndExtension[1];
+                        ImageExtension extension = ImageExtension.valueOf(
+                                nameAndExtension[1].toUpperCase()
+                        );
                     })
                     .filter(obj -> obj.id.equals(id))
                     .map(obj -> {
@@ -95,6 +91,8 @@ public class ImageRepository {
                 dbFolder,
                 image.getId(),
                 image.getExtension()
+                        .toString()
+                        .toLowerCase()
         ));
         try {
 
@@ -127,9 +125,11 @@ public class ImageRepository {
                     .map(obj -> new Object() {
                         Path filePath = obj.filePath;
                         Long id = Long.parseLong(obj.nameAndExtension[0]);
-                        String extension = obj.nameAndExtension[1];
+                        ImageExtension extension = ImageExtension.valueOf(
+                                obj.nameAndExtension[1]
+                                        .toUpperCase()
+                        );
                     })
-                    .peek(obj -> validateExtension(obj.extension))
                     .anyMatch(obj -> obj.id.equals(id));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -142,6 +142,8 @@ public class ImageRepository {
                 dbFolder,
                 image.getId(),
                 image.getExtension()
+                        .toString()
+                        .toLowerCase()
         ));
         if (Files.notExists(path)) {
             log.error("Invalid image object. {}.{}", image.getId(), image.getExtension());
@@ -161,11 +163,5 @@ public class ImageRepository {
         configurationRepository.writeData(config);
 
         return id;
-    }
-
-    private void validateExtension(String extension) {
-        if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
-            throw new RuntimeException("Extension can't be " + extension);
-        }
     }
 }

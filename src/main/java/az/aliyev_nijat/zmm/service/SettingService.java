@@ -1,6 +1,7 @@
 package az.aliyev_nijat.zmm.service;
 
 import az.aliyev_nijat.zmm.model.entity.ImageEntity;
+import az.aliyev_nijat.zmm.model.entity.ImageExtension;
 import az.aliyev_nijat.zmm.model.entity.SettingsEntity;
 import az.aliyev_nijat.zmm.repository.ImageRepository;
 import az.aliyev_nijat.zmm.repository.SettingsRepository;
@@ -57,7 +58,10 @@ public class SettingService {
             settings.setImageUrl(null);
         }
         String[] splited = image.getOriginalFilename().split("\\.");
-        String extension = splited[splited.length - 1];
+        ImageExtension extension = ImageExtension
+                .valueOf(
+                        splited[splited.length - 1].toUpperCase()
+                );
         byte[] content;
         try {
             content = image.getBytes();
