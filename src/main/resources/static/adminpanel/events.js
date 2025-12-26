@@ -417,7 +417,7 @@ class Page {
 }
 
 if (localStorage.getItem("zmmtoken") == null) {
-    window.location.href = "./login.html";
+    window.location.href = "/adminpanel/login";
 }
 else {
     Api.getUser()
@@ -428,5 +428,5 @@ else {
         .then(() => {
             Page.loadPage();
         })
-        .catch(() => window.location.href = "./login.html");
+        .catch(() => window.location.href = "/adminpanel/login");
 }

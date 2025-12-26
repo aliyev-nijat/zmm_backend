@@ -14,7 +14,7 @@ public class CustomErrorController implements ErrorController {
         String requestUri = (String) request.getAttribute("jakarta.servlet.error.request_uri");
 
         if (statusCode != null && statusCode == 404) {
-            return requestUri.startsWith("/adminpanel") ? "redirect:/adminpanel/index.html" : "redirect:/";
+            return requestUri.startsWith("/adminpanel") ? "redirect:/adminpanel" : "redirect:/";
         }
 
         return "/error.html";

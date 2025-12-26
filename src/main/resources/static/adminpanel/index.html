@@ -53,10 +53,10 @@
 
 <body>
     <nav>
-        <a href="./events.html">Tədbirlər</a>
-        <a href="./slider.html">Slider</a>
-        <a href="./courses.html">Kurslar</a>
-        <a href="./settings.html">Əlaqə məlumatları</a>
+        <a href="/adminpanel/events">Tədbirlər</a>
+        <a href="/adminpanel/slider">Slider</a>
+        <a href="/adminpanel/courses">Kurslar</a>
+        <a href="/adminpanel/settings">Əlaqə məlumatları</a>
     </nav>
     <iframe src="/" width="97%" height="400"></iframe>
     <script>
@@ -69,14 +69,14 @@
             })
         }
         if (localStorage.getItem("zmmtoken") == null) {
-            window.location.href = "./login.html";
+            window.location.href = "/adminpanel/login";
         }
         else {
             getUser()
                 .then(r => {
                     if (r.status != 200) throw Error();
                 })
-                .catch(() => window.location.href = "./login.html");
+                .catch(() => window.location.href = "/adminpanel/login");
         }
     </script>
 </body>
