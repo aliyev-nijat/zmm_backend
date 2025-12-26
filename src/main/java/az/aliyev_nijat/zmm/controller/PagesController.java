@@ -42,4 +42,44 @@ public class PagesController {
     public String events() {
         return "events.html";
     }
+
+    @GetMapping("/adminpanel")
+    public String adminpanel(){
+        return "/adminpanel/index.html";
+    }
+
+    @GetMapping("/adminpanel/courses")
+    public String adminpanelCourses(){
+        return "/adminpanel/courses.html";
+    }
+
+    @GetMapping("/adminpanel/coursesUpdate")
+    public String adminpanelCoursesUpdate(){
+        return "/adminpanel/coursesUpdate.html";
+    }
+
+    @GetMapping("/adminpanel/events")
+    public String adminpanelEvents(){
+        return "/adminpanel/events.html";
+    }
+
+    @GetMapping("/adminpanel/login")
+    public String adminpanelLogin(){
+        return "/adminpanel/login.html";
+    }
+
+    @GetMapping("/adminpanel/settings")
+    public String adminpanelSettings(){
+        return "/adminpanel/settings.html";
+    }
+
+    @GetMapping("/adminpanel/slider")
+    public String adminpanelSlider(){
+        return "/adminpanel/slider.html";
+    }
+
+    @GetMapping("/adminpanel/unlockAdmin")
+    public String adminpanelUnlockAdmin(){
+        return "/adminpanel/unlockAdmin.html";
+    }
 }

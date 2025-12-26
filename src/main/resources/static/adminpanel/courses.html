@@ -125,7 +125,7 @@
                     buttonEdit.addEventListener("click", e => {
                         e.preventDefault();
                         localStorage.setItem("currentCourseId", set.course.id);
-                        window.location.href = "/adminpanel/coursesUpdate.html";
+                        window.location.href = "/adminpanel/coursesUpdate";
                     })
                     td.appendChild(buttonEdit);
                     
@@ -204,7 +204,7 @@
             })
         }
         if (localStorage.getItem("zmmtoken") == null) {
-            window.location.href = "./login.html";
+            window.location.href = "/adminpanel/login";
         }
         else {
             getUser()
@@ -212,7 +212,7 @@
                     if (r.status != 200) throw Error();
                     return r.json();
                 })
-                .catch(() => window.location.href = "./login.html");
+                .catch(() => window.location.href = "/adminpanel/login");
         }
         let form = document.querySelector("form");
         form.addEventListener('submit', e => {

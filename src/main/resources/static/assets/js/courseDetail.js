@@ -40,7 +40,7 @@ function renderCourseDetail(data) {
   const btn = createEl("button", "", btnBox, "Müraciət et");
   btn.addEventListener("click", () => {
     
-    window.location.href = `./apply.html?id=${courseId}`;
+    window.location.href = `/apply?id=${courseId}`;
   });
 
   // ==========================

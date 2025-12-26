@@ -56,7 +56,7 @@ function renderCourseSlides(list) {
     span.innerHTML = crs.duration || ""; // backend-dən gələn istənilən sahə
 
     btn.addEventListener("click", () => {
-      window.location.href = `courseDetail.html?id=${crs.id}`; // yönləndirmə
+      window.location.href = `/courseDetail?id=${crs.id}`; // yönləndirmə
     });
   });
 
@@ -83,7 +83,7 @@ function renderCourses(list) {
     btn.textContent = "Ətraflı məlumat";
 
     btn.addEventListener("click", () => {
-      window.location.href = `courseDetail.html?id=${crs.id}`;
+      window.location.href = `/courseDetail?id=${crs.id}`;
     });
   });
 }

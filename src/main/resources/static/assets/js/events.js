@@ -59,7 +59,7 @@ function renderSlides(data) {
     span.innerHTML = `${datePart}<br>${timePart}`;
 
     btn.addEventListener("click", (e) => {
-      window.location.href = `eventDetail.html?id=${ev.id}`;
+      window.location.href = `/eventDetail?id=${ev.id}`;
     });
   });
 
@@ -106,7 +106,7 @@ function renderEvents(list) {
     span.innerHTML = `${datePart}<br>${timePart}`;
 
     btn.addEventListener("click", () => {
-      window.location.href = `eventDetail.html?id=${ev.id}`;
+      window.location.href = `/eventDetail?id=${ev.id}`;
     });
   });
 }
