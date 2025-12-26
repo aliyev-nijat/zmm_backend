@@ -51,7 +51,7 @@ function fillDetail(ev) {
   about.innerHTML = ev.about;
 
   const btn = createEl("button", "", contentBox);
-  btn.innerHTML = "Bilet əldə edin";
+  btn.innerHTML = "Daha ətraflı məlumat üçün clicklə";
 
   btn.addEventListener("click", () => {
     fetch(`${host}/api/settings`)
