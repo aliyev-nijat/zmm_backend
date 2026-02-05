@@ -1,9 +1,8 @@
 package az.aliyev_nijat.zmm.controller;
 
-import az.aliyev_nijat.zmm.model.entity.ImageEntity;
+import az.aliyev_nijat.zmm.model.entity.ImageResponse;
 import az.aliyev_nijat.zmm.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +20,10 @@ public class ImageController {
     public ResponseEntity<byte[]> getById(
             @PathVariable Long id
     ) {
-        ImageEntity image = imageService.getImageById(id);
-        String mimeType = String.format("image/%s", image.getExtension());
+        ImageResponse image = imageService.getImageById(id);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(mimeType))
-                .body(image.getContent());
+                .contentType(image.mimeType())
+                .body(image.content());
     }
 }

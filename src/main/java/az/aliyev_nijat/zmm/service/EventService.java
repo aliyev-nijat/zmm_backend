@@ -4,10 +4,8 @@ import az.aliyev_nijat.zmm.exception.EventNotFoundException;
 import az.aliyev_nijat.zmm.mapper.EventMapper;
 import az.aliyev_nijat.zmm.model.dto.EventDto;
 import az.aliyev_nijat.zmm.model.entity.EventEntity;
-import az.aliyev_nijat.zmm.model.entity.ImageEntity;
-import az.aliyev_nijat.zmm.model.entity.ImageExtension;
-import az.aliyev_nijat.zmm.repository.ImageRepository;
 import az.aliyev_nijat.zmm.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +27,7 @@ public class EventService {
     @Autowired
     private final EventMapper mapper;
     private final EventRepository repository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
     public EventDto create(EventDto event) {
         EventEntity eventEntity = mapper.map(event);
@@ -68,10 +65,10 @@ public class EventService {
     }
 
     public void deleteById(@NonNull Long id) {
-        try {
-            deleteImage(id);
-        } catch (ResponseStatusException e) {
-        }
+        repository.findById(id)
+                .filter(event -> event.getImageId() != null)
+                .map(EventEntity::getImageId)
+                .ifPresent(this::deleteImage);
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
@@ -100,13 +97,11 @@ public class EventService {
                 );
     }
 
+    @Transactional
     public Map<String, Object> uploadImage(
             @NonNull Long eventId,
             MultipartFile image
     ) {
-        if (image == null || image.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
         EventEntity event = repository
                 .findById(eventId)
                 .orElseThrow(() ->
@@ -114,24 +109,9 @@ public class EventService {
                 );
         Long oldImageId = event.getImageId();
         if (oldImageId != null) {
-            imageRepository.delete(oldImageId);
+            imageService.deleteById(oldImageId);
         }
-        String[] splited = image.getOriginalFilename().split("\\.");
-        ImageExtension extension = ImageExtension
-                .valueOf(
-                        splited[splited.length - 1].toUpperCase()
-                );
-        byte[] content;
-        try {
-            content = image.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ImageEntity imageEntity = new ImageEntity();
-        imageEntity.setExtension(extension);
-        imageEntity.setContent(content);
-        ImageEntity newImageEntity = imageRepository.create(imageEntity);
-        Long newImageId = newImageEntity.getId();
+        Long newImageId = imageService.create(image);
         event.setImageId(newImageId);
         event.setImageUrl(String.format(
                 "/api/images/%d",
@@ -153,7 +133,7 @@ public class EventService {
                 );
         Long imageId = event.getImageId();
         if (imageId != null) {
-            imageRepository.delete(imageId);
+            imageService.deleteById(imageId);
             event.setImageUrl(null);
             event.setImageId(null);
             repository.save(event);

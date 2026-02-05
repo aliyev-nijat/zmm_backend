@@ -4,15 +4,12 @@ import az.aliyev_nijat.zmm.mapper.CourseMapper;
 import az.aliyev_nijat.zmm.model.dto.CourseApplyDto;
 import az.aliyev_nijat.zmm.model.dto.CourseDto;
 import az.aliyev_nijat.zmm.model.entity.CourseEntity;
-import az.aliyev_nijat.zmm.model.entity.ImageEntity;
-import az.aliyev_nijat.zmm.model.entity.ImageExtension;
 import az.aliyev_nijat.zmm.repository.CourseRepository;
-import az.aliyev_nijat.zmm.repository.ImageRepository;
 import az.aliyev_nijat.zmm.util.TelegramAdapter;
 import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,9 +29,8 @@ import java.util.Map;
 public class CourseService {
 
     private final CourseRepository repository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
     private final CourseMapper mapper;
-    private final Object LOCK = new Object();
 
     public CourseDto getById(Long id) {
         return repository
@@ -54,14 +49,18 @@ public class CourseService {
         );
     }
 
-    public void deleteById(Long id) {
-        try {
-            repository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND
-            );
+    public void deleteById(@NonNull Long id) {
+        CourseEntity course = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND
+                ));
+        if (course.getImageId() != null) {
+            imageService.deleteById(course.getImageId());
         }
+        if (course.getTeacherImageId() != null) {
+            imageService.deleteById(course.getTeacherImageId());
+        }
+        repository.deleteById(id);
     }
 
     public CourseDto update(Long id, CourseDto course) {
@@ -73,7 +72,9 @@ public class CourseService {
                         )
                 );
         CourseEntity newCourse = mapper.map(course);
+        newCourse.setImageId(oldCourse.getImageId());
         newCourse.setImageUrl(oldCourse.getImageUrl());
+        newCourse.setTeacherImageId(oldCourse.getTeacherImageId());
         newCourse.setTeacherImageUrl(
                 oldCourse.getTeacherImageUrl()
         );
@@ -85,10 +86,6 @@ public class CourseService {
             @NonNull Long courseId,
             MultipartFile image
     ) {
-        synchronized (LOCK) {
-            if (image == null || image.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
             CourseEntity course = repository
                     .findById(courseId)
                     .orElseThrow(() ->
@@ -96,24 +93,9 @@ public class CourseService {
                     );
             Long oldImageId = course.getImageId();
             if (oldImageId != null) {
-                imageRepository.delete(oldImageId);
+                imageService.deleteById(oldImageId);
             }
-            String[] splited = image.getOriginalFilename().split("\\.");
-            ImageExtension extension = ImageExtension
-                    .valueOf(
-                            splited[splited.length - 1].toUpperCase()
-                    );
-            byte[] content;
-            try {
-                content = image.getBytes();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            ImageEntity imageEntity = new ImageEntity();
-            imageEntity.setExtension(extension);
-            imageEntity.setContent(content);
-            ImageEntity newImageEntity = imageRepository.create(imageEntity);
-            Long newImageId = newImageEntity.getId();
+            Long newImageId = imageService.create(image);
             course.setImageId(newImageId);
             course.setImageUrl(String.format(
                     "/api/images/%d",
@@ -125,7 +107,6 @@ public class CourseService {
             result.put("imageUrl", String.format("/images/%d", newImageId));
 
             return result;
-        }
     }
 
     public void deleteImage(@NonNull Long courseId) {
@@ -136,7 +117,7 @@ public class CourseService {
                 );
         Long imageId = course.getImageId();
         if (imageId != null) {
-            imageRepository.delete(imageId);
+            imageService.deleteById(imageId);
             course.setImageUrl(null);
             course.setImageId(null);
             repository.save(course);
@@ -148,14 +129,11 @@ public class CourseService {
         }
     }
 
+    @Transactional
     public Map<String, Object> uploadTeacherImage(
             @NonNull Long courseId,
             MultipartFile image
     ) {
-        synchronized (LOCK) {
-            if (image == null || image.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
             CourseEntity course = repository
                     .findById(courseId)
                     .orElseThrow(() ->
@@ -163,24 +141,9 @@ public class CourseService {
                     );
             Long oldTeacherImageId = course.getTeacherImageId();
             if (oldTeacherImageId != null) {
-                imageRepository.delete(oldTeacherImageId);
+                imageService.deleteById(oldTeacherImageId);
             }
-            String[] splited = image.getOriginalFilename().split("\\.");
-            ImageExtension extension = ImageExtension
-                    .valueOf(
-                            splited[splited.length - 1].toUpperCase()
-                    );
-            byte[] content;
-            try {
-                content = image.getBytes();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            ImageEntity imageEntity = new ImageEntity();
-            imageEntity.setExtension(extension);
-            imageEntity.setContent(content);
-            ImageEntity newImageEntity = imageRepository.create(imageEntity);
-            Long newTeacherImageId = newImageEntity.getId();
+            Long newTeacherImageId = imageService.create(image);
             course.setTeacherImageId(newTeacherImageId);
             course.setTeacherImageUrl(String.format(
                     "/api/images/%d",
@@ -192,7 +155,6 @@ public class CourseService {
             result.put("imageUrl", String.format("/images/%d", newTeacherImageId));
 
             return result;
-        }
     }
 
     public void deleteTeacherImage(@NonNull Long courseId) {
@@ -203,7 +165,7 @@ public class CourseService {
                 );
         Long teacherImageId = course.getTeacherImageId();
         if (teacherImageId != null) {
-            imageRepository.delete(teacherImageId);
+            imageService.deleteById(teacherImageId);
             course.setTeacherImageUrl(null);
             course.setTeacherImageId(null);
             repository.save(course);
